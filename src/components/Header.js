@@ -19,7 +19,7 @@ const HeaderLink = ({ page, selected }) => {
   // console.log(page, selected)
 
 const Header = () => {
-  console.log(useLocation())
+  // console.log(useLocation())
   // const page = useParams().page || 'home';
   const page = useLocation().pathname.slice(1) || 'home';
 

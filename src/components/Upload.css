@@ -1,0 +1,7 @@
+.hide-progress {
+  display: none;
+}
+
+.show-progress {
+  display: block;
+}
