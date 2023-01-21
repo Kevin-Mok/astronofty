@@ -3,13 +3,21 @@ import axie from "../tile.jpeg";
 import { useLocation, useParams } from "react-router-dom";
 import MarketplaceJSON from "../Marketplace.json";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import alchemy from "./Alchemy";
+import { Carousel } from 'react-responsive-carousel'
+import styles from 'react-responsive-carousel/lib/styles/carousel.min.css';
+// var Carousel = require('react-responsive-carousel').Carousel;
 
 export default function NFTPage(props) {
-  const [data, updateData] = useState({});
+  const [data, updateData] = useState({ images: [] });
   const [dataFetched, updateDataFetched] = useState(false);
   const [message, updateMessage] = useState("");
   const [currAddress, updateCurrAddress] = useState("0x");
+
+  // useEffect(() => {
+    // console.log(currAddress, data.owner)
+  // }, [data]);
 
   async function getNFTData(tokenId) {
     const ethers = require("ethers");
@@ -25,8 +33,12 @@ export default function NFTPage(props) {
     );
     //create an NFT Token
     const tokenURI = await contract.tokenURI(tokenId);
+    console.log(tokenURI)
     const listedToken = await contract.getListedTokenForId(tokenId);
+    console.log(listedToken)
+    // let owner = ""
     let meta = await axios.get(tokenURI);
+    console.log(meta)
     meta = meta.data;
     console.log(listedToken);
 
@@ -34,16 +46,25 @@ export default function NFTPage(props) {
       price: meta.price,
       tokenId: tokenId,
       seller: listedToken.seller,
-      owner: listedToken.owner,
+      owner: "",
       image: meta.image,
+      images: Object.values(meta.attributes),
       name: meta.name,
       description: meta.description,
+      metadata: tokenURI
     };
     console.log(item);
     updateData(item);
     updateDataFetched(true);
     console.log("address", addr);
-    updateCurrAddress(addr);
+    updateCurrAddress(addr.toLowerCase());
+    // Print total NFT count returned in the response:
+    alchemy.nft.getOwnersForNft(MarketplaceJSON.address, tokenId).then((ownersResult) => { 
+      console.log(ownersResult)
+      item.owner = ownersResult.owners[0]
+      updateData({... item});
+      console.log(currAddress, data.owner)
+    });
   }
 
   async function buyNFT(tokenId) {
@@ -82,33 +103,48 @@ export default function NFTPage(props) {
     <div style={{ "min-height": "100vh" }}>
       <Navbar></Navbar>
       <div className="flex ml-20 mt-20">
-        <img src={data.image} alt="" className="w-2/5" />
+        <Carousel showArrows={true}>
+          {data.images.map((image) => {
+            return (
+            <div>
+              <img src={image.value} />
+              <p className="legend">{image.trait_type}</p>
+            </div>)
+          })}
+        </Carousel>
         <div className="text-xl ml-20 space-y-8 text-white shadow-2xl rounded-lg border-2 p-5">
           <div>Name: {data.name}</div>
           <div>Description: {data.description}</div>
           <div>
-            Price: <span className="">{data.price + " ETH"}</span>
+            Owner: 
+            {currAddress == data.owner ? (
+              <span className="text-emerald-700">
+                &nbsp;you
+              </span>
+            ) : (
+              <span className="text-sm">{data.owner}</span>
+            )}
           </div>
           <div>
-            Owner: <span className="text-sm">{data.owner}</span>
+            Price: <span className="">{data.price + " ETH"}</span>
           </div>
           <div>
             Seller: <span className="text-sm">{data.seller}</span>
           </div>
           <div>
             {currAddress == data.owner || currAddress == data.seller ? (
+              <span className="text-sm"></span>
+            ) : (
               <button
                 className="enableEthereumButton bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm"
                 onClick={() => buyNFT(tokenId)}
               >
                 Buy this NFT
               </button>
-            ) : (
-              <div className="text-emerald-700">
-                You are the owner of this NFT
-              </div>
             )}
-
+            <a href={data.metadata} target="_blank">
+              <button class="btn btn-blue bg-blue-500 p-2">Metadata</button>
+            </a>
             <div className="text-green text-center mt-3">{message}</div>
           </div>
         </div>
@@ -116,3 +152,4 @@ export default function NFTPage(props) {
     </div>
   );
 }
+              // <input type="button" class="button" value="Metadata" />

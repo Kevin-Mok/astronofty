@@ -4,14 +4,14 @@ import MarketplaceJSON from "../Marketplace.json";
 import axios from "axios";
 import { useState } from "react";
 import NFTTile from "./NFTTile";
-// Setup: npm install alchemy-sdk
-import { Alchemy, Network } from "alchemy-sdk";
+// import { Alchemy, Network } from "alchemy-sdk";
+import alchemy from "./Alchemy";
 
-const config = {
-  apiKey: process.env.REACT_APP_ALCHEMY_API_KEY,
-  network: Network.ETH_GOERLI,
-};
-const alchemy = new Alchemy(config);
+// const config = {
+  // apiKey: process.env.REACT_APP_ALCHEMY_API_KEY,
+  // network: Network.ETH_GOERLI,
+// };
+// const alchemy = new Alchemy(config);
 
 export default function Profile() {
   const [data, updateData] = useState([]);
@@ -20,7 +20,6 @@ export default function Profile() {
   const [totalPrice, updateTotalPrice] = useState("0");
 
   async function getNFTData(tokenId) {
-    console.log("Getting NFT's")
     const ethers = require("ethers");
     let sumPrice = 0;
     //After adding your Hardhat network to your metamask, this code will get providers and signers
@@ -38,7 +37,7 @@ export default function Profile() {
     //create an NFT Token
     let transaction = await contract.getMyNFTs();
     const nfts = await alchemy.nft.getNftsForOwner(addr);
-    console.log(addr)
+    // console.log(addr)
     // console.log(nfts.ownedNfts[0])
 
     /*
