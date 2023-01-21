@@ -20,6 +20,7 @@ export default function Profile() {
   const [totalPrice, updateTotalPrice] = useState("0");
 
   async function getNFTData(tokenId) {
+    console.log("Getting NFT's")
     const ethers = require("ethers");
     let sumPrice = 0;
     //After adding your Hardhat network to your metamask, this code will get providers and signers
