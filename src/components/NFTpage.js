@@ -9,8 +9,12 @@ import { Carousel } from 'react-responsive-carousel'
 import styles from 'react-responsive-carousel/lib/styles/carousel.min.css';
 // var Carousel = require('react-responsive-carousel').Carousel;
 
+const shortenAddress = (addr) => { 
+  return addr.substring(0,5) + "..." + addr.substring(addr.length - 4, addr.length)
+}
+
 export default function NFTPage(props) {
-  const [data, updateData] = useState({ images: [] });
+  const [data, updateData] = useState({ owner: "", images: [] });
   const [dataFetched, updateDataFetched] = useState(false);
   const [message, updateMessage] = useState("");
   const [currAddress, updateCurrAddress] = useState("0x");
@@ -76,9 +80,6 @@ export default function NFTPage(props) {
     });
   }
 
-  // TODO: add list button to createListedToken,
-  // price input field, placeholder current
-  // price //
   async function listNFT(tokenId) {
     try {
       const ethers = require("ethers");
@@ -103,7 +104,6 @@ export default function NFTPage(props) {
     }
   }
 
-  // TODO: add buy button to executeSale
   async function buyNFT(tokenId) {
     try {
       const ethers = require("ethers");
@@ -117,18 +117,18 @@ export default function NFTPage(props) {
         MarketplaceJSON.abi,
         signer
       );
-      const salePrice = ethers.utils.parseUnits(data.price, "ether");
-      updateMessage("Buying the NFT... Please Wait (Upto 5 mins)");
+      // const salePrice = ethers.utils.parseUnits(price, "ether");
+      const salePrice = price * Math.pow(10,18)
+      updateMessage("Please confirm the buy transaction and then wait for the transaction to finish.");
       //run the executeSale function
       let transaction = await contract.executeSale(tokenId, {
         value: salePrice,
       });
       await transaction.wait();
 
-      alert("You successfully bought the NFT!");
-      updateMessage("");
+      updateMessage("You successfully bought the NFT.");
     } catch (e) {
-      alert("Upload Error" + e);
+      updateMessage("Upload Error" + e);
     }
   }
 
@@ -166,12 +166,14 @@ export default function NFTPage(props) {
                 &nbsp;you
               </span>
             ) : (
-              <span className="text-sm">&nbsp;{data.owner}</span>
+              <span className="text-sm">&nbsp;{shortenAddress(data.owner)}</span>
             )}
           </div>
               <div>
                 Price: <span className="">{price + " ETH"}</span>
               </div>
+            {currAddress == data.owner ? (
+              <div>
               <input
                 className="shadow appearance-none
                   border rounded w-20 py-2 px-3
@@ -191,6 +193,15 @@ export default function NFTPage(props) {
               >
                 List NFT
               </button>
+              </div>
+            ) : (
+              <button
+                className="enableEthereumButton bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm"
+                onClick={() => buyNFT(tokenId)}
+              >
+                Buy NFT
+              </button>
+            )}
           <div>
             {currAddress == data.owner || currAddress == data.seller ? (
               <span></span>
