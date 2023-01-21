@@ -35,7 +35,7 @@ export default function Profile() {
     );
 
     //create an NFT Token
-    let transaction = await contract.getMyNFTs();
+    // let transaction = await contract.getMyNFTs();
     const nfts = await alchemy.nft.getNftsForOwner(addr);
     // console.log(addr)
     // console.log(nfts.ownedNfts[0])
@@ -66,15 +66,24 @@ export default function Profile() {
       // })
     // );
     console.log(nfts)
-    const items = nfts["ownedNfts"].map(nft => { 
+    let items = nfts["ownedNfts"].map(nft => { 
+      // TODO: has happened where metadata
+      // fetchable but raw metadata empty,
+      // fetch using axios? //
+      // TODO: fetch price //
       const metadata = nft.rawMetadata
       let item = {
         tokenId: nft.tokenId,
         image: metadata.image,
         name: metadata.name,
         description: metadata.description,
+        contract: nft.contract.address
       };
       return item;
+    })
+    items = items.filter(item => { 
+      console.log(item.contract, MarketplaceJSON.address.toLowerCase())
+      return item.contract == MarketplaceJSON.address.toLowerCase()
     })
     console.log(items)
 

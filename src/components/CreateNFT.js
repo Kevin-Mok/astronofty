@@ -128,8 +128,8 @@ class CreateNFT extends React.Component {
       xhr.open(
         "POST",
         // "http://localhost:3004/content/add"
-        // "https://upload.estuary.tech/content/add"
       "https://api.estuary.tech/content/add"
+        // "https://upload.estuary.tech/content/add"
       );
       xhr.setRequestHeader(
         "Authorization",
@@ -190,8 +190,8 @@ class CreateNFT extends React.Component {
       xhr.open(
         "POST",
         // "http://localhost:3004/content/add"
-        // "https://upload.estuary.tech/content/add"
       "https://api.estuary.tech/content/add"
+        // "https://upload.estuary.tech/content/add"
       );
       xhr.setRequestHeader(
         "Authorization",
@@ -299,12 +299,12 @@ class CreateNFT extends React.Component {
       console.log(metadata);
       this.uploadMetadata(metadata).then(metadataResult => { 
         console.log(metadataResult)
-        this.listNFT(metadataResult.metadataCID)
+        this.createNFT(metadataResult.metadataCID)
       })
     });
   };
 
-  async listNFT(metadataCID) {
+  async createNFT(metadataCID) {
     //Upload data to IPFS
     try {
       // const metadataURL = await this.uploadMetadataToIPFS();
@@ -323,15 +323,8 @@ class CreateNFT extends React.Component {
         signer
       );
 
-      //massage the params to be sent to the create NFT request
-      // const price = ethers.utils.parseUnits(formParams.price, 'ether')
-      // const price = ethers.utils.parseUnits(this.state.price, "ether");
-      // let listingPrice = await contract.getListPrice();
-      // listingPrice = listingPrice.toString();
-
       //actually create the NFT
-      // let transaction = await contract.createToken(this.state.recipient, metadataCID);
-      let transaction = await contract.createToken(metadataCID);
+      let transaction = await contract.createToken(this.state.recipient, metadataCID);
       await transaction.wait();
 
       // alert("Successfully listed your NFT!");
@@ -349,56 +342,7 @@ class CreateNFT extends React.Component {
       });
     }
   }
-  // async listNFT(e) {
-    // e.preventDefault();
 
-    // //Upload data to IPFS
-    // try {
-      // const metadataURL = await this.uploadMetadataToIPFS();
-      // //After adding your Hardhat network to your metamask, this code will get providers and signers
-      // const provider = new ethers.providers.Web3Provider(window.ethereum);
-      // const signer = provider.getSigner();
-      // // updateMessage("Please wait.. uploading (upto 5 mins)")
-      // this.setState({
-        // msg: "Please wait.. uploading (upto 5 mins)",
-      // });
-
-      // //Pull the deployed contract instance
-      // let contract = new ethers.Contract(
-        // Marketplace.address,
-        // Marketplace.abi,
-        // signer
-      // );
-
-      // //massage the params to be sent to the create NFT request
-      // // const price = ethers.utils.parseUnits(formParams.price, 'ether')
-      // const price = ethers.utils.parseUnits(this.state.price, "ether");
-      // let listingPrice = await contract.getListPrice();
-      // listingPrice = listingPrice.toString();
-
-      // //actually create the NFT
-      // let transaction = await contract.createToken(metadataURL, price, {
-        // value: listingPrice,
-      // });
-      // await transaction.wait();
-
-      // alert("Successfully listed your NFT!");
-      // // updateMessage("");
-      // this.setState({
-        // msg: "Please wait.. uploading (upto 5 mins)",
-        // name: "",
-        // description: "",
-        // price: "",
-      // });
-      // // updateFormParams({ name: '', description: '', price: ''});
-      // // window.location.replace("/")
-      // // }
-    // } catch (e) {
-      // alert("Upload error" + e);
-    // }
-  // }
-
-  // console.log("Working", process.env);
   render() {
     const uploadChildren = [];
 
