@@ -20,6 +20,54 @@ export const getGoerliLink = (txnHash) => {
   return "https://goerli.etherscan.io/tx/" + txnHash;
 };
 
+export const fetchedPriceToEth = (wei) => {
+  const weiInt = parseInt(wei._hex);
+  const eth = weiInt / Math.pow(10, 18);
+  console.log(eth);
+  return eth;
+};
+
+export const getNFTData = async (tokenId) => { 
+  const ethers = require("ethers");
+  //After adding your Hardhat network to your metamask, this code will get providers and signers
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const addr = await signer.getAddress();
+  //Pull the deployed contract instance
+  let contract = new ethers.Contract(
+    MarketplaceJSON.address,
+    MarketplaceJSON.abi,
+    signer
+  );
+  //create an NFT Token
+  const tokenURI = await contract.tokenURI(tokenId);
+  console.log(tokenURI);
+  const listedToken = await contract.getListedTokenForId(tokenId);
+  console.log(listedToken);
+  // let owner = ""
+  let meta = await axios.get(tokenURI);
+  console.log(meta);
+  meta = meta.data;
+  console.log(listedToken);
+
+  let item = {
+    // price: meta.price,
+    tokenId: tokenId,
+    owner: "",
+    image: meta.image,
+    images: Object.values(meta.attributes),
+    name: meta.name,
+    description: meta.description,
+    metadata: tokenURI,
+  };
+  console.log(item);
+  return {
+    addr: addr,
+    item: item,
+    listedToken: listedToken,
+  }
+}
+
 export default function NFTPage(props) {
   const [data, updateData] = useState({ owner: "", images: [] });
   // const [userData, updateUserData] = useState({ owner: "", images: [] });
@@ -36,54 +84,8 @@ export default function NFTPage(props) {
   // console.log(currAddress, data.owner)
   // }, [data]);
 
-  const fetchedPriceToEth = (wei) => {
-    const weiInt = parseInt(wei._hex);
-    const eth = weiInt / Math.pow(10, 18);
-    console.log(eth);
-    return eth;
-  };
-
-  // const updateImageDescription = (imageIndex, description) => {
-    // const updatedUserData = {...userData}
-    // userData.images[imageIndex].trait_type = description
-    // updateUserData(updatedUserData)
-    // console.log(userData)
-  // }
-
-  async function getNFTData(tokenId) {
-    const ethers = require("ethers");
-    //After adding your Hardhat network to your metamask, this code will get providers and signers
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const addr = await signer.getAddress();
-    //Pull the deployed contract instance
-    let contract = new ethers.Contract(
-      MarketplaceJSON.address,
-      MarketplaceJSON.abi,
-      signer
-    );
-    //create an NFT Token
-    const tokenURI = await contract.tokenURI(tokenId);
-    console.log(tokenURI);
-    const listedToken = await contract.getListedTokenForId(tokenId);
-    console.log(listedToken);
-    // let owner = ""
-    let meta = await axios.get(tokenURI);
-    console.log(meta);
-    meta = meta.data;
-    console.log(listedToken);
-
-    let item = {
-      // price: meta.price,
-      tokenId: tokenId,
-      owner: "",
-      image: meta.image,
-      images: Object.values(meta.attributes),
-      name: meta.name,
-      description: meta.description,
-      metadata: tokenURI,
-    };
-    console.log(item);
+  async function updateNFTData(tokenId) {
+    const { item, listedToken, addr } = await getNFTData(tokenId)
     updateData(item);
     // updateUserData(item);
     if (listedToken.currentlyListed) {
@@ -104,40 +106,6 @@ export default function NFTPage(props) {
         console.log(currAddress, data.owner);
       });
   }
-
-  // async function listNFT(tokenId) {
-    // try {
-      // const ethers = require("ethers");
-      // //After adding your Hardhat network to your metamask, this code will get providers and signers
-      // const provider = new ethers.providers.Web3Provider(window.ethereum);
-      // const signer = provider.getSigner();
-
-      // //Pull the deployed contract instance
-      // let contract = new ethers.Contract(
-        // MarketplaceJSON.address,
-        // MarketplaceJSON.abi,
-        // signer
-      // );
-      // const salePrice = ethers.utils.parseUnits(userPrice, "ether");
-      // updateMessage(
-        // "Please confirm the list transaction and then wait for the transaction to finish."
-      // );
-      // //run the executeSale function
-      // let transaction = await contract.createListedToken(tokenId, salePrice);
-      // console.log(transaction);
-      // updateTxn({
-        // txn: true,
-        // txnLink: getGoerliLink(transaction.hash),
-      // });
-      // await transaction.wait();
-      // updateMessage("You successfully listed your NFT.");
-      // updateTxn({ txn: false });
-      // await getNFTData(tokenId);
-      // // awaitTxn(transaction, "You successfully listed your NFT.")
-    // } catch (e) {
-      // updateMessage("Upload Error" + e);
-    // }
-  // }
 
   async function buyNFT(tokenId) {
     try {
@@ -168,15 +136,13 @@ export default function NFTPage(props) {
       await transaction.wait();
       updateMessage("You successfully bought the NFT.");
       updateTxn({ txn: false });
-      await getNFTData(tokenId);
+      await updateNFTData(tokenId);
       // awaitTxn(transaction, "You successfully bought the NFT.")
     } catch (e) {
       updateMessage("" + e);
     }
   }
 
-  // TODO: add edit buttons to edit
-  // images/names, another page?
   async function editNFT(metadataLink) {
     try {
       const ethers = require("ethers");
@@ -206,23 +172,28 @@ export default function NFTPage(props) {
       await transaction.wait();
       updateMessage("You successfully listed your NFT.");
       updateTxn({ txn: false });
-      await getNFTData(tokenId);
+      await updateNFTData(tokenId);
       // awaitTxn(transaction, "You successfully listed your NFT.")
     } catch (e) {
       updateMessage("Upload Error" + e);
     }
   }
 
+  const openImg = (index, image) => {
+    // console.log(index, image)
+    // window.open(image.value, '_blank', 'noreferrer');
+    window.open(data.images[index].value, '_blank', 'noreferrer');
+  }
 
   const params = useParams();
   const tokenId = params.tokenId;
-  if (!dataFetched) getNFTData(tokenId);
+  if (!dataFetched) updateNFTData(tokenId);
 
   return (
     <div style={{ "min-height": "100vh" }}>
       <Navbar></Navbar>
       <div className="flex ml-20 mt-20">
-        <Carousel showArrows={true}>
+        <Carousel showArrows={true} onClickItem={openImg}>
           {data.images.map((image) => {
             return (
               <div>
@@ -274,13 +245,16 @@ export default function NFTPage(props) {
               <UpdateImages data={data} metaCallback={editNFT} />
             </div>
           ) : (
-            <button
+            <div></div>
+          )}
+          {price != notListedStr ? (<button
               className="enableEthereumButton bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm"
               onClick={() => buyNFT(tokenId)}
             >
               Buy NFT
-            </button>
-          )}
+          </button>) :
+            <div></div>
+          }
           <div>
             {txn.txn == false ? (
               <div className="text-emerald-700 text-center mt-3">{message}</div>

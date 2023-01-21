@@ -1,4 +1,5 @@
 import Navbar from "./Navbar";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { uploadFileToIPFS, uploadJSONToIPFS } from "../pinata";
 import Marketplace from "../Marketplace.json";
@@ -24,6 +25,7 @@ class CreateNFT extends React.Component {
         txn: false,
         txnLink: ""
       },
+      toToken: {},
       recipient: "",
       numUpload: 1,
       files: {
@@ -275,13 +277,25 @@ class CreateNFT extends React.Component {
         }
       });
       await transaction.wait();
+      // console.log(transaction)
 
       // alert("Successfully listed your NFT!");
       // updateMessage("");
       this.setState({
-        msg: "Successfully created your NFT.",
-        txn: false,
+        // msg: "Successfully created the NFT.",
+        msg: "",
+        txn: {
+          txn: false
+        }
       });
+      const curTokenId = await contract.getCurrentToken()
+      console.log(curTokenId)
+      this.setState({
+        toToken: {
+          pathname: "/nftPage/" + curTokenId
+        }
+      });
+
       // updateFormParams({ name: '', description: '', price: ''});
       // window.location.replace("/")
       // }
@@ -427,6 +441,17 @@ class CreateNFT extends React.Component {
                   {this.state.txn.txnLink}
                 </a>
               </div>
+            )}
+            {this.state.toToken.pathname ? (
+              <div>
+                Successfully created 
+                <Link to={this.state.toToken}
+                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                  &nbsp;the NFT.
+                </Link>
+              </div>
+            ) : (
+              <div></div>
             )}
           </form>
         </div>

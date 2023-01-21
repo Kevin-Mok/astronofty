@@ -1,13 +1,29 @@
 import axie from "../tile.jpeg";
+import ethLogo from '../eth-logo.png';
+// import { ReactComponent as ethLogo } from "../eth-logo.svg";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 
 function NFTTile(data) {
   const newTo = {
     pathname: "/nftPage/" + data.data.tokenId,
   };
+  console.log(data)
   return (
     <Link to={newTo}>
-      <div className="border-2 ml-12 mt-5 mb-12 flex flex-col items-center rounded-lg w-48 md:w-72 shadow-2xl">
+      <div className="border-2 border-black ml-12 mt-5 mb-12 flex flex-col items-center rounded-lg w-48 md:w-72 shadow-2xl">
+        <div className="w-full pr-2 text-xl text-right text-black">{data.data.listed ? 
+          (
+          <div>
+          <img
+            src={ethLogo}
+            alt=""
+            className="inline pr-1 h-4 rounded-lg"
+          />
+            <span>{data.data.price}</span>
+          </div>
+          ) 
+          : "Unlisted"}
+        </div>
         <img
           src={data.data.image}
           alt=""

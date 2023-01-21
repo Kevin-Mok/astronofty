@@ -7,6 +7,8 @@ import NFTTile from "./NFTTile";
 // import { Alchemy, Network } from "alchemy-sdk";
 import alchemy from "./Alchemy";
 
+import { getNFTData, fetchedPriceToEth } from "./NFTpage.js";
+
 // const config = {
 // apiKey: process.env.REACT_APP_ALCHEMY_API_KEY,
 // network: Network.ETH_GOERLI,
@@ -19,7 +21,7 @@ export default function Profile() {
   const [address, updateAddress] = useState("0x");
   const [totalPrice, updateTotalPrice] = useState("0");
 
-  async function getNFTData(tokenId) {
+  async function getAllNFTs(tokenId) {
     const ethers = require("ethers");
     let sumPrice = 0;
     //After adding your Hardhat network to your metamask, this code will get providers and signers
@@ -36,7 +38,10 @@ export default function Profile() {
 
     //create an NFT Token
     // let transaction = await contract.getMyNFTs();
-    const nfts = await alchemy.nft.getNftsForOwner(addr);
+    // const nfts = await alchemy.nft.getNftsForOwner(addr);
+    let latestTokenId = await contract.getCurrentToken()
+    latestTokenId = parseInt(latestTokenId._hex, 16)
+    console.log(latestTokenId)
     // console.log(addr)
     // console.log(nfts.ownedNfts[0])
 
@@ -44,51 +49,27 @@ export default function Profile() {
      * Below function takes the metadata from tokenURI and the data returned by getMyNFTs() contract function
      * and creates an object of information that is to be displayed
      */
+    let items = []
+    for (let i = 1; i < latestTokenId + 1; i++) {
+      const ownerAddr = await contract.ownerOf(i)
+      if (ownerAddr == addr) {
+        const tokenObj = await getNFTData(i)
+        const listedToken = await contract.getListedTokenForId(i)
+        console.log(tokenObj)
+        const item = tokenObj.item
+        // console.log(tokenObj.item.metadata)
+        items.push({
+          tokenId: item.tokenId,
+          image: item.image,
+          name: item.name,
+          description: item.description,
+          price: fetchedPriceToEth(listedToken.price),
+          listed: listedToken.currentlyListed,
+        })
+      }
+      // updateData(items);
+    }
 
-    // const items = await Promise.all(
-    // transaction.map(async (i) => {
-    // const tokenURI = await contract.tokenURI(i.tokenId);
-    // let meta = await axios.get(tokenURI);
-    // meta = meta.data;
-
-    // let price = ethers.utils.formatUnits(i.price.toString(), "ether");
-    // let item = {
-    // price,
-    // tokenId: i.tokenId.toNumber(),
-    // seller: i.seller,
-    // owner: i.owner,
-    // image: meta.image,
-    // name: meta.name,
-    // description: meta.description,
-    // };
-    // sumPrice += Number(price);
-    // return item;
-    // })
-    // );
-    console.log(nfts);
-    let items = nfts["ownedNfts"].map((nft) => {
-      // has happened where metadata
-      // fetchable but raw metadata empty,
-      // TODO: iterate through NFT's in
-      // contract instead, fetches wrong
-      // tokenURI
-      // use getNFTData from NFT page
-      // fetch using axios? //
-      // TODO: fetch price //
-      const metadata = nft.rawMetadata;
-      let item = {
-        tokenId: nft.tokenId,
-        image: metadata.image,
-        name: metadata.name,
-        description: metadata.description,
-        contract: nft.contract.address,
-      };
-      return item;
-    });
-    items = items.filter((item) => {
-      console.log(item.contract, MarketplaceJSON.address.toLowerCase());
-      return item.contract == MarketplaceJSON.address.toLowerCase();
-    });
     console.log(items);
 
     updateData(items);
@@ -99,7 +80,7 @@ export default function Profile() {
 
   const params = useParams();
   const tokenId = params.tokenId;
-  if (!dataFetched) getNFTData(tokenId);
+  if (!dataFetched) getAllNFTs(tokenId);
 
   return (
     <div className="profileClass" style={{ "min-height": "100vh" }}>

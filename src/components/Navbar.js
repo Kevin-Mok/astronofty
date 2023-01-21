@@ -104,15 +104,6 @@ function Navbar() {
                   <Link to="/createNFT">Create NFT</Link>
                 </li>
               )}
-              {location.pathname === "/editNFT" ? (
-                <li className="border-b-2 hover:pb-0 p-2">
-                  <Link to="/listNFT">List My NFT</Link>
-                </li>
-              ) : (
-                <li className="hover:border-b-2 hover:pb-0 p-2">
-                  <Link to="/listNFT">List My NFT</Link>
-                </li>
-              )}
               {location.pathname === "/profile" ? (
                 <li className="border-b-2 hover:pb-0 p-2">
                   <Link to="/profile">Profile</Link>
