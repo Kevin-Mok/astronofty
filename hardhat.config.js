@@ -1,5 +1,7 @@
 require("@nomiclabs/hardhat-waffle");
 require("@nomiclabs/hardhat-ethers");
+require("@nomiclabs/hardhat-etherscan");
+require('dotenv').config()
 const fs = require("fs");
 // const infuraId = fs.readFileSync(".infuraid").toString().trim() || "";
 
@@ -38,5 +40,8 @@ module.exports = {
         runs: 200,
       },
     },
+  },
+  etherscan: {
+    apiKey: process.env.REACT_APP_ETHERSCAN_KEY,
   },
 };

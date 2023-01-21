@@ -95,13 +95,22 @@ function Navbar() {
                   <Link to="/">Marketplace</Link>
                 </li>
               )}
-              {location.pathname === "/sellNFT" ? (
+              {location.pathname === "/createNFT" ? (
                 <li className="border-b-2 hover:pb-0 p-2">
-                  <Link to="/sellNFT">List My NFT</Link>
+                  <Link to="/createNFT">Create NFT</Link>
                 </li>
               ) : (
                 <li className="hover:border-b-2 hover:pb-0 p-2">
-                  <Link to="/sellNFT">List My NFT</Link>
+                  <Link to="/createNFT">Create NFT</Link>
+                </li>
+              )}
+              {location.pathname === "/editNFT" ? (
+                <li className="border-b-2 hover:pb-0 p-2">
+                  <Link to="/listNFT">List My NFT</Link>
+                </li>
+              ) : (
+                <li className="hover:border-b-2 hover:pb-0 p-2">
+                  <Link to="/listNFT">List My NFT</Link>
                 </li>
               )}
               {location.pathname === "/profile" ? (

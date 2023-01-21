@@ -46,6 +46,7 @@ class Upload extends React.Component {
                   border rounded w-full py-2 px-3
                   text-gray-700 leading-tight
                   focus:outline-none focus:shadow-outline"
+         placeholder="Image description"
           onChange={this.addNameEvent}
         />
         <input type="file" onChange={this.addFileEvent} />
