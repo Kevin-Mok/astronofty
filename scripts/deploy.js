@@ -12,11 +12,11 @@ async function main() {
 
   const data = {
     address: marketplace.address,
-    abi: JSON.parse(marketplace.interface.format('json'))
-  }
+    abi: JSON.parse(marketplace.interface.format("json")),
+  };
 
   //This writes the ABI and address to the mktplace.json
-  fs.writeFileSync('./src/Marketplace.json', JSON.stringify(data))
+  fs.writeFileSync("./src/Marketplace.json", JSON.stringify(data));
 }
 
 main()
