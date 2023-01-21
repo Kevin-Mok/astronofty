@@ -1,43 +1,25 @@
 import './App.css';
-
-import React from 'react'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Header from './components/Header'
-import Upload from './components/Upload'
-import MultUpload from './components/MultUpload'
-
-const Home = () => (
-  <div>
-    <h2>Home</h2>
-  </div>
-);
-
-const About = () => (
-  <div>
-    <h2>About</h2>
-  </div>
-);
-
-const Contact = () => (
-  <div>
-    <h2>Contact</h2>
-  </div>
-);
+import Navbar from './components/Navbar.js';
+import Marketplace from './components/Marketplace';
+import Profile from './components/Profile';
+import SellNFT from './components/SellNFT';
+import NFTPage from './components/NFTpage';
+import ReactDOM from "react-dom/client";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
 
 function App() {
   return (
-    <div className='App'>
-      <BrowserRouter>
-        <Header />
+    <div className="container">
         <Routes>
-        <Route exact path='/' element={<Home />} />
-        <Route exact path='/home' element={<Home />} />
-        <Route exact path='/about' element={<About />} />
-        <Route exact path='/contact' element={<Contact />} />
-        <Route exact path='/upload' element={<Upload />} />
-        <Route exact path='/multUpload' element={<MultUpload />} />
+          <Route path="/" element={<Marketplace />}/>
+          <Route path="/nftPage" element={<NFTPage />}/>        
+          <Route path="/profile" element={<Profile />}/>
+          <Route path="/sellNFT" element={<SellNFT />}/>             
         </Routes>
-      </BrowserRouter>
     </div>
   );
 }
