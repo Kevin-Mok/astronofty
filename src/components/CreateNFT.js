@@ -126,14 +126,13 @@ class CreateNFT extends React.Component {
 
       xhr.open(
         "POST",
-        // "http://localhost:3004/content/add"
+        "http://localhost:3004/content/add"
         // "https://upload.estuary.tech/content/add"
-      "https://api.estuary.tech/content/add"
       );
       xhr.setRequestHeader(
         "Authorization",
-        // "Bearer " + process.env.REACT_APP_LOCAL_ESTUARY
-        "Bearer " + process.env.REACT_APP_LIVE_ESTUARY
+        "Bearer " + process.env.REACT_APP_LOCAL_ESTUARY
+        // "Bearer " + process.env.REACT_APP_LIVE_ESTUARY
       );
       xhr.send(formData);
     });
@@ -188,14 +187,13 @@ class CreateNFT extends React.Component {
       }.bind(this);
       xhr.open(
         "POST",
-        // "http://localhost:3004/content/add"
+        "http://localhost:3004/content/add"
         // "https://upload.estuary.tech/content/add"
-      "https://api.estuary.tech/content/add"
       );
       xhr.setRequestHeader(
         "Authorization",
-        // "Bearer " + process.env.REACT_APP_LOCAL_ESTUARY
-        "Bearer " + process.env.REACT_APP_LIVE_ESTUARY
+        "Bearer " + process.env.REACT_APP_LOCAL_ESTUARY
+        // "Bearer " + process.env.REACT_APP_LIVE_ESTUARY
       );
       xhr.send(formData);
     });
@@ -329,8 +327,7 @@ class CreateNFT extends React.Component {
       // listingPrice = listingPrice.toString();
 
       //actually create the NFT
-      // let transaction = await contract.createToken(this.state.recipient, metadataCID);
-      let transaction = await contract.createToken(metadataCID);
+      let transaction = await contract.createToken(this.state.recipient, metadataCID);
       await transaction.wait();
 
       alert("Successfully listed your NFT!");

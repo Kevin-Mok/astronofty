@@ -4,6 +4,14 @@ import MarketplaceJSON from "../Marketplace.json";
 import axios from "axios";
 import { useState } from "react";
 import NFTTile from "./NFTTile";
+// Setup: npm install alchemy-sdk
+import { Alchemy, Network } from "alchemy-sdk";
+
+const config = {
+  apiKey: process.env.REACT_APP_ALCHEMY_API_KEY,
+  network: Network.ETH_GOERLI,
+};
+const alchemy = new Alchemy(config);
 
 export default function Profile() {
   const [data, updateData] = useState([]);
@@ -28,32 +36,47 @@ export default function Profile() {
 
     //create an NFT Token
     let transaction = await contract.getMyNFTs();
+    const nfts = await alchemy.nft.getNftsForOwner(addr);
+    console.log(addr)
+    // console.log(nfts.ownedNfts[0])
 
     /*
      * Below function takes the metadata from tokenURI and the data returned by getMyNFTs() contract function
      * and creates an object of information that is to be displayed
      */
 
-    const items = await Promise.all(
-      transaction.map(async (i) => {
-        const tokenURI = await contract.tokenURI(i.tokenId);
-        let meta = await axios.get(tokenURI);
-        meta = meta.data;
+    // const items = await Promise.all(
+      // transaction.map(async (i) => {
+        // const tokenURI = await contract.tokenURI(i.tokenId);
+        // let meta = await axios.get(tokenURI);
+        // meta = meta.data;
 
-        let price = ethers.utils.formatUnits(i.price.toString(), "ether");
-        let item = {
-          price,
-          tokenId: i.tokenId.toNumber(),
-          seller: i.seller,
-          owner: i.owner,
-          image: meta.image,
-          name: meta.name,
-          description: meta.description,
-        };
-        sumPrice += Number(price);
-        return item;
-      })
-    );
+        // let price = ethers.utils.formatUnits(i.price.toString(), "ether");
+        // let item = {
+          // price,
+          // tokenId: i.tokenId.toNumber(),
+          // seller: i.seller,
+          // owner: i.owner,
+          // image: meta.image,
+          // name: meta.name,
+          // description: meta.description,
+        // };
+        // sumPrice += Number(price);
+        // return item;
+      // })
+    // );
+    console.log(nfts)
+    const items = nfts["ownedNfts"].map(nft => { 
+      const metadata = nft.rawMetadata
+      let item = {
+        tokenId: nft.tokenId,
+        image: metadata.image,
+        name: metadata.name,
+        description: metadata.description,
+      };
+      return item;
+    })
+    console.log(items)
 
     updateData(items);
     updateFetched(true);
