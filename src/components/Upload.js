@@ -11,6 +11,9 @@ class Upload extends React.Component {
       file: "",
       name: "",
     };
+    if (props.name) {
+      this.state.name = props.name
+    }
   }
 
   uploadChildCallback = () => {
@@ -46,8 +49,9 @@ class Upload extends React.Component {
                   border rounded w-full py-2 px-3
                   text-gray-700 leading-tight
                   focus:outline-none focus:shadow-outline"
-         placeholder="Image description"
+          placeholder="Image description"
           onChange={this.addNameEvent}
+          value={this.state.name}
         />
         <input type="file" onChange={this.addFileEvent} />
         <br />

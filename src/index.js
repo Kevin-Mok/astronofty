@@ -17,15 +17,15 @@ root.render(
   </React.StrictMode>
 );
 
-    // <BrowserRouter>
-      // <Routes>
-        // <Route path="/" element={<Marketplace />} />
-        // <Route path="/createNFT" element={<CreateNFT />} />
-        // <Route path="/nftPage/:tokenId" element={<NFTPage />} />
-        // <Route path="/profile" element={<Profile />} />
-        // <Route path="/editNFT" element={<EditNFT />} />
-      // </Routes>
-    // </BrowserRouter>
+// <BrowserRouter>
+// <Routes>
+// <Route path="/" element={<Marketplace />} />
+// <Route path="/createNFT" element={<CreateNFT />} />
+// <Route path="/nftPage/:tokenId" element={<NFTPage />} />
+// <Route path="/profile" element={<Profile />} />
+// <Route path="/editNFT" element={<EditNFT />} />
+// </Routes>
+// </BrowserRouter>
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

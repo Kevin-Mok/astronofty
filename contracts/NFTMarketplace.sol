@@ -15,21 +15,15 @@ contract NFTMarketplace is ERC721URIStorage {
     Counters.Counter private _itemsSold;
     //owner is the contract address that created the smart contract
     address payable owner;
-    //The fee charged by the marketplace to be allowed to list an NFT
-    // uint256 listPrice = 0.01 ether;
 
     //The structure to store info about a listed token
     struct ListedToken {
-        uint256 tokenId;
-        address payable seller;
         uint256 price;
         bool currentlyListed;
     }
 
     //the event emitted when a token is successfully listed
     event TokenListedSuccess (
-        uint256 indexed tokenId,
-        address seller,
         uint256 price,
         bool currentlyListed
     );
@@ -40,20 +34,6 @@ contract NFTMarketplace is ERC721URIStorage {
     constructor() ERC721("NFTMarketplace", "NFTM") {
         owner = payable(msg.sender);
     }
-
-    // function updateListPrice(uint256 _listPrice) public payable {
-        // require(owner == msg.sender, "Only owner can update listing price");
-        // listPrice = _listPrice;
-    // }
-
-    // function getListPrice() public view returns (uint256) {
-        // return listPrice;
-    // }
-
-    // function getLatestIdToListedToken() public view returns (ListedToken memory) {
-        // uint256 currentTokenId = _tokenIds.current();
-        // return idToListedToken[currentTokenId];
-    // }
 
     function getListedTokenForId(uint256 tokenId) public view returns (ListedToken memory) {
         return idToListedToken[tokenId];
@@ -77,45 +57,35 @@ contract NFTMarketplace is ERC721URIStorage {
         //Map the tokenId to the tokenURI (which is an IPFS URL with the NFT metadata)
         _setTokenURI(newTokenId, tokenURI);
 
-        //Helper function to update Global variables and emit an event
-        // createListedToken(newTokenId, price);
-
         return newTokenId;
     }
 
     function createListedToken(uint256 tokenId,
                                uint256 price)
                                public {
-        //Make sure the sender sent enough ETH to pay for listing
-        // require(msg.value == listPrice, "Hopefully sending the correct price");
         //Just sanity check
         require(msg.sender == ownerOf(tokenId),
                 "Make sure only owner of token can list");
         require(price > 0, "Make sure the price isn't negative");
 
         //approve the marketplace to sell NFTs on your behalf
-        // approve(address(this), tokenId);
         setApprovalForAll(address(this), true);
 
         //Update the mapping of tokenId's to Token details, useful for retrieval functions
-        idToListedToken[tokenId] = ListedToken(
-            tokenId,
-            payable(msg.sender),
-            price,
-            true
-        );
+        idToListedToken[tokenId] = ListedToken(price, true);
 
-        // transfer from sender to contract
-        // _transfer(msg.sender, address(this), tokenId);
         //Emit the event for successful transfer. The frontend parses this message and updates the end user
-        emit TokenListedSuccess(
-            tokenId,
-            msg.sender,
-            price,
-            true
-        );
+        emit TokenListedSuccess(price, true);
     }
     
+    function modifyToken(uint256 tokenId, string memory tokenURI, uint256 price) public {
+        require(msg.sender == ownerOf(tokenId),
+                "Make sure only owner can modify token");
+        _setTokenURI(tokenId, tokenURI);
+        idToListedToken[tokenId].price = price;
+        idToListedToken[tokenId].currentlyListed = true;
+    }
+
     //This will return all the NFTs currently listed to be sold on the marketplace
     // function getAllNFTs() public view returns (ListedToken[] memory) {
         // uint nftCount = _tokenIds.current();
@@ -137,24 +107,17 @@ contract NFTMarketplace is ERC721URIStorage {
     
     function executeSale(uint256 tokenId) public payable {
         uint price = idToListedToken[tokenId].price;
-        address seller = idToListedToken[tokenId].seller;
         require(msg.value == price, "Please submit the asking price in order to complete the purchase");
 
         //update the details of the token
-        // idToListedToken[tokenId].currentlyListed = true;
-        idToListedToken[tokenId].seller = payable(msg.sender);
+        idToListedToken[tokenId].currentlyListed = false;
         _itemsSold.increment();
 
         //Actually transfer the token to the new owner
-        // _transfer(address(this), msg.sender, tokenId);
-        _transfer(seller, msg.sender, tokenId);
-        //approve the marketplace to sell NFTs on your behalf
-        // approve(address(this), tokenId);
+        _transfer(ownerOf(tokenId), msg.sender, tokenId);
 
-        //Transfer the listing fee to the marketplace creator
-        // payable(owner).transfer(listPrice);
         //Transfer the proceeds from the sale to the seller of the NFT
-        payable(seller).transfer(msg.value);
+        payable(ownerOf(tokenId)).transfer(msg.value);
     }
 
     //We might add a resell token function in the future

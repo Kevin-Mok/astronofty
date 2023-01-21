@@ -85,10 +85,10 @@ class SellNFT extends React.Component {
     );
   };
 
-  formatCID = (cid) => { 
+  formatCID = (cid) => {
     // return "https://gateway.estuary.tech/gw/ipfs/" + cid
-    return "https://ipfs.io/ipfs/" + cid
-  }
+    return "https://ipfs.io/ipfs/" + cid;
+  };
 
   uploadMetadata = (metadata) => {
     return new Promise((resolve) => {
@@ -96,9 +96,11 @@ class SellNFT extends React.Component {
       // formData.append("data", e.target.files[0]);
       console.log(metadata);
       // formData.append("data", JSON.stringify(metadata));
-      const metadataString = JSON.stringify(metadata)
-      console.log(metadataString)
-      const metadataBlob = new Blob([metadataString],{type:'application/json'})
+      const metadataString = JSON.stringify(metadata);
+      console.log(metadataString);
+      const metadataBlob = new Blob([metadataString], {
+        type: "application/json",
+      });
       formData.append("data", metadataBlob);
       // console.log(metadataBlob)
       // console.log(formData)
@@ -108,18 +110,16 @@ class SellNFT extends React.Component {
       xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
           let cid = JSON.parse(xhr.responseText).cid;
-          cid = this.formatCID(cid)
+          cid = this.formatCID(cid);
           console.log(cid);
-          this.setState({ metadata: cid },
-            () => {
-              // console.log(this.state)
-              console.log(this.state.metadata);
-              // this.uploadMetadataToIPFS(metadata)
-              resolve({
-                metadata: this.state.metadata,
-              });
-            }
-          );
+          this.setState({ metadata: cid }, () => {
+            // console.log(this.state)
+            console.log(this.state.metadata);
+            // this.uploadMetadataToIPFS(metadata)
+            resolve({
+              metadata: this.state.metadata,
+            });
+          });
         }
       }.bind(this);
 
@@ -162,7 +162,7 @@ class SellNFT extends React.Component {
       xhr.onreadystatechange = function () {
         if (xhr.readyState === XMLHttpRequest.DONE) {
           let cid = JSON.parse(xhr.responseText).cid;
-          cid = this.formatCID(cid)
+          cid = this.formatCID(cid);
           console.log(cid);
           this.setState(
             (prevState) => {
@@ -219,31 +219,31 @@ class SellNFT extends React.Component {
 
   //This function uploads the metadata to IPFS
   // async uploadMetadataToIPFS() {
-    // // const {name, description, price} = formParams;
-    // const name = this.state.name;
-    // const description = this.state.description;
-    // const price = this.state.price;
-    // const fileURL = this.state.fileURL;
-    // //Make sure that none of the fields are empty
-    // if (!name || !description || !price || !fileURL) return;
+  // // const {name, description, price} = formParams;
+  // const name = this.state.name;
+  // const description = this.state.description;
+  // const price = this.state.price;
+  // const fileURL = this.state.fileURL;
+  // //Make sure that none of the fields are empty
+  // if (!name || !description || !price || !fileURL) return;
 
-    // const nftJSON = {
-      // name,
-      // description,
-      // price,
-      // image: fileURL,
-    // };
+  // const nftJSON = {
+  // name,
+  // description,
+  // price,
+  // image: fileURL,
+  // };
 
-    // try {
-      // //upload the metadata JSON to IPFS
-      // const response = await uploadJSONToIPFS(nftJSON);
-      // if (response.success === true) {
-        // console.log("Uploaded JSON to Pinata: ", response);
-        // return response.pinataURL;
-      // }
-    // } catch (e) {
-      // console.log("error uploading JSON metadata:", e);
-    // }
+  // try {
+  // //upload the metadata JSON to IPFS
+  // const response = await uploadJSONToIPFS(nftJSON);
+  // if (response.success === true) {
+  // console.log("Uploaded JSON to Pinata: ", response);
+  // return response.pinataURL;
+  // }
+  // } catch (e) {
+  // console.log("error uploading JSON metadata:", e);
+  // }
   // }
   async uploadMetadataToIPFS(metadata) {
     try {
@@ -278,7 +278,7 @@ class SellNFT extends React.Component {
       console.log(uploadResults);
       console.log(this.state);
       // for (var upload in uploadResults) {
-        // uploadResults[upload]["cid"] = "ipfs://" + uploadResults[upload]["cid"];
+      // uploadResults[upload]["cid"] = "ipfs://" + uploadResults[upload]["cid"];
       // }
       const metadata = {
         description: this.state.description,
@@ -293,9 +293,9 @@ class SellNFT extends React.Component {
         });
       }
       console.log(metadata);
-      this.uploadMetadata(metadata).then(metadataResult => { 
-        console.log(metadataResult)
-      })
+      this.uploadMetadata(metadata).then((metadataResult) => {
+        console.log(metadataResult);
+      });
     });
   };
 

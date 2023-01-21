@@ -8,8 +8,8 @@ import NFTTile from "./NFTTile";
 import alchemy from "./Alchemy";
 
 // const config = {
-  // apiKey: process.env.REACT_APP_ALCHEMY_API_KEY,
-  // network: Network.ETH_GOERLI,
+// apiKey: process.env.REACT_APP_ALCHEMY_API_KEY,
+// network: Network.ETH_GOERLI,
 // };
 // const alchemy = new Alchemy(config);
 
@@ -46,46 +46,50 @@ export default function Profile() {
      */
 
     // const items = await Promise.all(
-      // transaction.map(async (i) => {
-        // const tokenURI = await contract.tokenURI(i.tokenId);
-        // let meta = await axios.get(tokenURI);
-        // meta = meta.data;
+    // transaction.map(async (i) => {
+    // const tokenURI = await contract.tokenURI(i.tokenId);
+    // let meta = await axios.get(tokenURI);
+    // meta = meta.data;
 
-        // let price = ethers.utils.formatUnits(i.price.toString(), "ether");
-        // let item = {
-          // price,
-          // tokenId: i.tokenId.toNumber(),
-          // seller: i.seller,
-          // owner: i.owner,
-          // image: meta.image,
-          // name: meta.name,
-          // description: meta.description,
-        // };
-        // sumPrice += Number(price);
-        // return item;
-      // })
+    // let price = ethers.utils.formatUnits(i.price.toString(), "ether");
+    // let item = {
+    // price,
+    // tokenId: i.tokenId.toNumber(),
+    // seller: i.seller,
+    // owner: i.owner,
+    // image: meta.image,
+    // name: meta.name,
+    // description: meta.description,
+    // };
+    // sumPrice += Number(price);
+    // return item;
+    // })
     // );
-    console.log(nfts)
-    let items = nfts["ownedNfts"].map(nft => { 
-      // TODO: has happened where metadata
+    console.log(nfts);
+    let items = nfts["ownedNfts"].map((nft) => {
+      // has happened where metadata
       // fetchable but raw metadata empty,
+      // TODO: iterate through NFT's in
+      // contract instead, fetches wrong
+      // tokenURI
+      // use getNFTData from NFT page
       // fetch using axios? //
       // TODO: fetch price //
-      const metadata = nft.rawMetadata
+      const metadata = nft.rawMetadata;
       let item = {
         tokenId: nft.tokenId,
         image: metadata.image,
         name: metadata.name,
         description: metadata.description,
-        contract: nft.contract.address
+        contract: nft.contract.address,
       };
       return item;
-    })
-    items = items.filter(item => { 
-      console.log(item.contract, MarketplaceJSON.address.toLowerCase())
-      return item.contract == MarketplaceJSON.address.toLowerCase()
-    })
-    console.log(items)
+    });
+    items = items.filter((item) => {
+      console.log(item.contract, MarketplaceJSON.address.toLowerCase());
+      return item.contract == MarketplaceJSON.address.toLowerCase();
+    });
+    console.log(items);
 
     updateData(items);
     updateFetched(true);

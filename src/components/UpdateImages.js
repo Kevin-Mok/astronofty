@@ -6,33 +6,42 @@ import { useLocation } from "react-router";
 import React from "react";
 
 import Upload from "./Upload";
-import { getGoerliLink } from "./NFTpage";
 
 const ethers = require("ethers");
 
 // export default function SellNFT () {
-class CreateNFT extends React.Component {
+class UpdateImages extends React.Component {
   constructor(props) {
+    // TODO: get existing NFT metadata from NFT
+    // page //
     super(props);
     this.state = {
-      name: "",
-      description: "",
+      name: props.data.name,
+      description: props.data.description,
       price: "",
       fileURL: null,
       msg: "",
-      txn: {
-        txn: false,
-        txnLink: ""
-      },
       recipient: "",
       numUpload: 1,
       files: {
-        0: {
-          loaded: 0,
-          total: 0,
-        },
+        // 0: {
+          // loaded: 0,
+          // total: 0,
+        // },
       },
     };
+    for (let i = 0; i < props.data.images.length; i++) {
+      console.log(props.data.images[i])
+      // let files = { ...prevState.files };
+      this.state.files[i] = {
+        name: props.data.images[i].trait_type,
+        cid: props.data.images[i].value,
+        loaded: 0,
+        total: 0,
+      }
+    }
+    this.state.numUpload = props.data.images.length
+    console.log(this.state)
   }
 
   onAddUpload = (e) => {
@@ -130,13 +139,14 @@ class CreateNFT extends React.Component {
 
       xhr.open(
         "POST",
-        "http://localhost:3004/content/add"
+        // "http://localhost:3004/content/add"
+      "https://api.estuary.tech/content/add"
         // "https://upload.estuary.tech/content/add"
       );
       xhr.setRequestHeader(
         "Authorization",
-        "Bearer " + process.env.REACT_APP_LOCAL_ESTUARY
-        // "Bearer " + process.env.REACT_APP_LIVE_ESTUARY
+        // "Bearer " + process.env.REACT_APP_LOCAL_ESTUARY
+        "Bearer " + process.env.REACT_APP_LIVE_ESTUARY
       );
       xhr.send(formData);
     });
@@ -144,6 +154,12 @@ class CreateNFT extends React.Component {
 
   upload = (fileKey) => {
     return new Promise((resolve) => {
+      if (!this.state.files[fileKey].file) {
+        resolve({
+          name: this.state.files[fileKey].name,
+          cid: this.state.files[fileKey].cid,
+        });
+      }
       const formData = new FormData();
       // formData.append("data", e.target.files[0]);
       const file = this.state.files[fileKey]["file"];
@@ -191,13 +207,14 @@ class CreateNFT extends React.Component {
       }.bind(this);
       xhr.open(
         "POST",
-        "http://localhost:3004/content/add"
+        // "http://localhost:3004/content/add"
+      "https://api.estuary.tech/content/add"
         // "https://upload.estuary.tech/content/add"
       );
       xhr.setRequestHeader(
         "Authorization",
-        "Bearer " + process.env.REACT_APP_LOCAL_ESTUARY
-        // "Bearer " + process.env.REACT_APP_LIVE_ESTUARY
+        // "Bearer " + process.env.REACT_APP_LOCAL_ESTUARY
+        "Bearer " + process.env.REACT_APP_LIVE_ESTUARY
       );
       xhr.send(formData);
     });
@@ -240,7 +257,10 @@ class CreateNFT extends React.Component {
       console.log(metadata);
       this.uploadMetadata(metadata).then((metadataResult) => {
         console.log(metadataResult);
-        this.createNFT(metadataResult.metadataCID);
+        // TODO: callback function in NFT
+        // page to call modifyToken //
+        // this.createNFT(metadataResult.metadataCID);
+        this.props.metaCallback(metadataResult.metadataCID);
       });
     });
   };
@@ -268,19 +288,12 @@ class CreateNFT extends React.Component {
         this.state.recipient,
         metadataCID
       );
-      this.setState({
-        txn: {
-          txn: true,
-          txnLink: getGoerliLink(transaction.hash),
-        }
-      });
       await transaction.wait();
 
       // alert("Successfully listed your NFT!");
       // updateMessage("");
       this.setState({
         msg: "Successfully created your NFT.",
-        txn: false,
       });
       // updateFormParams({ name: '', description: '', price: ''});
       // window.location.replace("/")
@@ -302,6 +315,7 @@ class CreateNFT extends React.Component {
           key={i}
           num={i}
           uploadChildCallback={this.uploadChildCallback}
+          name={this.state.files[i].name}
           loaded={this.state.files[i].loaded}
           total={this.state.files[i].total}
         />
@@ -310,83 +324,8 @@ class CreateNFT extends React.Component {
 
     return (
       <div className="">
-        <Navbar></Navbar>
         <div className="flex flex-col place-items-center mt-10" id="nftForm">
           <form className="bg-white shadow-md rounded px-8 pt-4 pb-8 mb-4">
-            <h3 className="text-center font-bold text-purple-500 mb-8">
-              Upload your NFT to the marketplace
-            </h3>
-            <div className="mb-4">
-              <label
-                className="block text-purple-500 text-sm font-bold mb-2"
-                htmlFor="name"
-              >
-                NFT Name
-              </label>
-              <input
-                className="shadow appearance-none
-                  border rounded w-full py-2 px-3
-              text-gray-700 leading-tight focus:outline-none
-              focus:shadow-outline"
-                id="name"
-                type="text"
-                placeholder="iPhone 14"
-                onChange={(e) => {
-                  this.setState({
-                    name: e.target.value,
-                  });
-                }}
-                value={this.state.name}
-              ></input>
-            </div>
-            <div className="mb-6">
-              <label
-                className="block text-purple-500 text-sm font-bold mb-2"
-                htmlFor="description"
-              >
-                NFT Description
-              </label>
-              <textarea
-                className="shadow
-                  appearance-none border rounded w-full py-2
-              px-3 text-gray-700 leading-tight
-                  focus:outline-none focus:shadow-outline"
-                cols="40"
-                rows="5"
-                id="description"
-                type="text"
-                placeholder="The 14th generation of iPhones."
-                value={this.state.description}
-                onChange={(e) =>
-                  this.setState({
-                    description: e.target.value,
-                  })
-                }
-              ></textarea>
-            </div>
-            <div className="mb-4">
-              <label
-                className="block text-purple-500 text-sm font-bold mb-2"
-                htmlFor="name"
-              >
-                NFT Recipient
-              </label>
-              <input
-                className="shadow appearance-none
-                  border rounded w-full py-2 px-3
-              text-gray-700 leading-tight focus:outline-none
-              focus:shadow-outline"
-                id="name"
-                type="text"
-                placeholder="0x820f57945ef2e6e880A251cfeB9770E7C89c6842"
-                onChange={(e) => {
-                  this.setState({
-                    recipient: e.target.value,
-                  });
-                }}
-                value={this.state.recipient}
-              ></input>
-            </div>
             <div>
               <label
                 className="block text-purple-500 text-sm font-bold mb-2"
@@ -406,6 +345,7 @@ class CreateNFT extends React.Component {
             </button>
 
             <br></br>
+            <div className="text-green text-center">{this.state.msg}</div>
             <button
               onClick={this.mint}
               className="font-bold mt-10 w-full
@@ -414,20 +354,6 @@ class CreateNFT extends React.Component {
             >
               List NFT
             </button>
-            {this.state.txn.txn == false ? (
-              <div className="text-green text-center">{this.state.msg}</div>
-            ) : (
-              <div>
-                <span>Transaction Link: </span>
-                <a
-                  href={this.state.txn.txnLink}
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  target="_blank"
-                >
-                  {this.state.txn.txnLink}
-                </a>
-              </div>
-            )}
           </form>
         </div>
       </div>
@@ -435,4 +361,4 @@ class CreateNFT extends React.Component {
   }
 }
 
-export default CreateNFT;
+export default UpdateImages;

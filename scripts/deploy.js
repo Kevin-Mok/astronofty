@@ -17,6 +17,7 @@ async function main() {
 
   //This writes the ABI and address to the mktplace.json
   fs.writeFileSync("./src/Marketplace.json", JSON.stringify(data));
+  console.log(data.address)
 }
 
 main()

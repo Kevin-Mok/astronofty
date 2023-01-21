@@ -53,15 +53,15 @@ export default function Marketplace() {
     );
     //create an NFT Token
     let transaction = await contract.getAllNFTs();
-    console.log(transaction)
+    console.log(transaction);
 
     //Fetch all the details of every NFT from the contract and display
     const items = await Promise.all(
       transaction.map(async (i) => {
-        const tokenId = parseInt(i.tokenId, 16)
-        console.log(tokenId)
+        const tokenId = parseInt(i.tokenId, 16);
+        console.log(tokenId);
         const tokenURI = await contract.tokenURI(tokenId);
-        console.log(tokenURI)
+        console.log(tokenURI);
         let meta = await axios.get(tokenURI);
         meta = meta.data;
 
@@ -78,7 +78,7 @@ export default function Marketplace() {
         return item;
       })
     );
-    console.log(items)
+    console.log(items);
 
     updateFetched(true);
     updateData(items);
