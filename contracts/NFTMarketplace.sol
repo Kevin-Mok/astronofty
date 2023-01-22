@@ -78,7 +78,6 @@ contract NFTMarketplace is ERC721URIStorage {
         emit TokenListedSuccess(price, true);
     }
     
-    // 
     function modifyToken(uint256 tokenId, string memory tokenURI, uint256 price) public {
         require(msg.sender == ownerOf(tokenId),
                 "Make sure only owner can modify token");

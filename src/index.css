@@ -2,16 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "ProtoMono";
+  src: local("ProtoMono"),
+    url("./fonts/proto-mono/Proto Mono Regular.ttf") format("truetype");
+}
+
 body {
   margin: 0;
   /*font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;*/
-  font-family: "Open Sans", sans-serif;
+  /* font-family: "Open Sans", sans-serif; */
+  font-family: "ProtoMono";
   /*font-family: 'M PLUS 1p', sans-serif;*/
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: url("./bg.png");
+  /* background-image: url("./bg.png"); */
+  background-color: rgb(8, 4, 4);
   background-size: 200% 180%;
   animation-duration: 3s;
   animation-timing-function: linear;

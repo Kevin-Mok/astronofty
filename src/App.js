@@ -9,7 +9,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div className="container">
+    <div className="container w-screen">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Marketplace />} />

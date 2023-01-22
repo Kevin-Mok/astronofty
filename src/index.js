@@ -4,11 +4,8 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import CreateNFT from "./components/CreateNFT";
-// import EditNFT from "./components/EditNFT";
-// import Marketplace from "./components/Marketplace";
-// import Profile from "./components/Profile";
-// import NFTPage from "./components/NFTpage";
+
+import "./fonts/proto-mono/Proto Mono Regular.ttf";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

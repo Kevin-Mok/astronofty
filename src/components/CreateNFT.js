@@ -21,11 +21,16 @@ class CreateNFT extends React.Component {
       price: "",
       fileURL: null,
       msg: "",
+      // msg: "Please confirm the mint transaction and then wait for the transaction to finish.",
       txn: {
         txn: false,
-        txnLink: ""
+        txnLink: "",
+        // txn: true,
+        // txnLink: "https://goerli.etherscan.io/tx/0xd8a758071c0fa625c2ae48fa036a5833fa7c2c74291735ba98228f15ee1a53fb"
       },
-      toToken: {},
+      toToken: {
+        // pathname: "/nftPage/1"
+      },
       recipient: "",
       numUpload: 1,
       files: {
@@ -132,13 +137,14 @@ class CreateNFT extends React.Component {
 
       xhr.open(
         "POST",
-        "http://localhost:3004/content/add"
+        // "http://localhost:3004/content/add"
+      "https://api.estuary.tech/content/add"
         // "https://upload.estuary.tech/content/add"
       );
       xhr.setRequestHeader(
         "Authorization",
-        "Bearer " + process.env.REACT_APP_LOCAL_ESTUARY
-        // "Bearer " + process.env.REACT_APP_LIVE_ESTUARY
+        // "Bearer " + process.env.REACT_APP_LOCAL_ESTUARY
+        "Bearer " + process.env.REACT_APP_LIVE_ESTUARY
       );
       xhr.send(formData);
     });
@@ -193,13 +199,14 @@ class CreateNFT extends React.Component {
       }.bind(this);
       xhr.open(
         "POST",
-        "http://localhost:3004/content/add"
+        // "http://localhost:3004/content/add"
+      "https://api.estuary.tech/content/add"
         // "https://upload.estuary.tech/content/add"
       );
       xhr.setRequestHeader(
         "Authorization",
-        "Bearer " + process.env.REACT_APP_LOCAL_ESTUARY
-        // "Bearer " + process.env.REACT_APP_LIVE_ESTUARY
+        // "Bearer " + process.env.REACT_APP_LOCAL_ESTUARY
+        "Bearer " + process.env.REACT_APP_LIVE_ESTUARY
       );
       xhr.send(formData);
     });
@@ -274,7 +281,7 @@ class CreateNFT extends React.Component {
         txn: {
           txn: true,
           txnLink: getGoerliLink(transaction.hash),
-        }
+        },
       });
       await transaction.wait();
       // console.log(transaction)
@@ -285,15 +292,15 @@ class CreateNFT extends React.Component {
         // msg: "Successfully created the NFT.",
         msg: "",
         txn: {
-          txn: false
-        }
+          txn: false,
+        },
       });
-      const curTokenId = await contract.getCurrentToken()
-      console.log(curTokenId)
+      const curTokenId = await contract.getCurrentToken();
+      console.log(curTokenId);
       this.setState({
         toToken: {
-          pathname: "/nftPage/" + curTokenId
-        }
+          pathname: "/nftPage/" + curTokenId,
+        },
       });
 
       // updateFormParams({ name: '', description: '', price: ''});
@@ -326,13 +333,13 @@ class CreateNFT extends React.Component {
       <div className="">
         <Navbar></Navbar>
         <div className="flex flex-col place-items-center mt-10" id="nftForm">
-          <form className="bg-white shadow-md rounded px-8 pt-4 pb-8 mb-4">
-            <h3 className="text-center font-bold text-purple-500 mb-8">
-              Upload your NFT to the marketplace
-            </h3>
+          <form className="shadow-md rounded px-8 pt-4 pb-8 mb-4 text-xl max-w-2xl">
+            <div className="text-center text-3xl font-bold text-purple-500 mb-8">
+              Create An NFT
+            </div>
             <div className="mb-4">
               <label
-                className="block text-purple-500 text-sm font-bold mb-2"
+                className="block text-purple-500 font-bold mb-2 text-med"
                 htmlFor="name"
               >
                 NFT Name
@@ -344,7 +351,7 @@ class CreateNFT extends React.Component {
               focus:shadow-outline"
                 id="name"
                 type="text"
-                placeholder="iPhone 14"
+                placeholder="Tadpole Nebula"
                 onChange={(e) => {
                   this.setState({
                     name: e.target.value,
@@ -355,7 +362,7 @@ class CreateNFT extends React.Component {
             </div>
             <div className="mb-6">
               <label
-                className="block text-purple-500 text-sm font-bold mb-2"
+                className="block text-purple-500 font-bold mb-2"
                 htmlFor="description"
               >
                 NFT Description
@@ -369,7 +376,7 @@ class CreateNFT extends React.Component {
                 rows="5"
                 id="description"
                 type="text"
-                placeholder="The 14th generation of iPhones."
+                placeholder="The Tadpole Nebula is a region of ionised hydrogen gas spanning over 100 lightyears..."
                 value={this.state.description}
                 onChange={(e) =>
                   this.setState({
@@ -380,7 +387,7 @@ class CreateNFT extends React.Component {
             </div>
             <div className="mb-4">
               <label
-                className="block text-purple-500 text-sm font-bold mb-2"
+                className="block text-purple-500 font-bold mb-2"
                 htmlFor="name"
               >
                 NFT Recipient
@@ -403,17 +410,17 @@ class CreateNFT extends React.Component {
             </div>
             <div>
               <label
-                className="block text-purple-500 text-sm font-bold mb-2"
+                className="block text-purple-500 font-bold mb-2"
                 htmlFor="image"
               >
-                Upload Image
+                Upload Images
               </label>
               {uploadChildren}
             </div>
             <button
-              className="font-bold mt-10
+              className="font-bold
                   bg-purple-500 text-white rounded p-2
-              shadow-lg"
+              shadow-lg mt-4"
               onClick={this.onAddUpload}
             >
               Add File
@@ -424,31 +431,35 @@ class CreateNFT extends React.Component {
               onClick={this.mint}
               className="font-bold mt-10 w-full
                   bg-purple-500 text-white rounded p-2
-              shadow-lg"
+                  shadow-lg"
             >
               List NFT
             </button>
             {this.state.txn.txn == false ? (
-              <div className="text-green text-center">{this.state.msg}</div>
+              <div className="mt-5 text-white text-center">
+                {this.state.msg}
+              </div>
             ) : (
-              <div>
-                <span>Transaction Link: </span>
+              <div className="mt-5 text-center">
                 <a
                   href={this.state.txn.txnLink}
                   className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                   target="_blank"
                 >
-                  {this.state.txn.txnLink}
+                  Transaction Link
                 </a>
               </div>
             )}
             {this.state.toToken.pathname ? (
-              <div>
-                Successfully created 
-                <Link to={this.state.toToken}
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                  &nbsp;the NFT.
+              <div className="text-white text-center">
+                Successfully created&nbsp;
+                <Link
+                  to={this.state.toToken}
+                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                >
+                  the NFT
                 </Link>
+                .
               </div>
             ) : (
               <div></div>

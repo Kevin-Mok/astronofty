@@ -7,7 +7,7 @@ import NFTTile from "./NFTTile";
 // import { Alchemy, Network } from "alchemy-sdk";
 import alchemy from "./Alchemy";
 
-import { getNFTData, fetchedPriceToEth } from "./NFTpage.js";
+import { getNFTData, fetchedPriceToEth, shortenAddress } from "./NFTpage.js";
 
 // const config = {
 // apiKey: process.env.REACT_APP_ALCHEMY_API_KEY,
@@ -19,11 +19,9 @@ export default function Profile() {
   const [data, updateData] = useState([]);
   const [dataFetched, updateFetched] = useState(false);
   const [address, updateAddress] = useState("0x");
-  const [totalPrice, updateTotalPrice] = useState("0");
 
   async function getAllNFTs(tokenId) {
     const ethers = require("ethers");
-    let sumPrice = 0;
     //After adding your Hardhat network to your metamask, this code will get providers and signers
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
@@ -39,9 +37,9 @@ export default function Profile() {
     //create an NFT Token
     // let transaction = await contract.getMyNFTs();
     // const nfts = await alchemy.nft.getNftsForOwner(addr);
-    let latestTokenId = await contract.getCurrentToken()
-    latestTokenId = parseInt(latestTokenId._hex, 16)
-    console.log(latestTokenId)
+    let latestTokenId = await contract.getCurrentToken();
+    latestTokenId = parseInt(latestTokenId._hex, 16);
+    console.log(latestTokenId);
     // console.log(addr)
     // console.log(nfts.ownedNfts[0])
 
@@ -49,14 +47,14 @@ export default function Profile() {
      * Below function takes the metadata from tokenURI and the data returned by getMyNFTs() contract function
      * and creates an object of information that is to be displayed
      */
-    let items = []
+    let items = [];
     for (let i = 1; i < latestTokenId + 1; i++) {
-      const ownerAddr = await contract.ownerOf(i)
+      const ownerAddr = await contract.ownerOf(i);
       if (ownerAddr == addr) {
-        const tokenObj = await getNFTData(i)
-        const listedToken = await contract.getListedTokenForId(i)
-        console.log(tokenObj)
-        const item = tokenObj.item
+        const tokenObj = await getNFTData(i);
+        const listedToken = await contract.getListedTokenForId(i);
+        console.log(tokenObj);
+        const item = tokenObj.item;
         // console.log(tokenObj.item.metadata)
         items.push({
           tokenId: item.tokenId,
@@ -65,7 +63,7 @@ export default function Profile() {
           description: item.description,
           price: fetchedPriceToEth(listedToken.price),
           listed: listedToken.currentlyListed,
-        })
+        });
       }
       // updateData(items);
     }
@@ -75,7 +73,6 @@ export default function Profile() {
     updateData(items);
     updateFetched(true);
     updateAddress(addr);
-    updateTotalPrice(sumPrice.toPrecision(3));
   }
 
   const params = useParams();
@@ -86,33 +83,15 @@ export default function Profile() {
     <div className="profileClass" style={{ "min-height": "100vh" }}>
       <Navbar></Navbar>
       <div className="profileClass">
-        <div className="flex text-center flex-col mt-11 md:text-2xl text-white">
-          <div className="mb-5">
-            <h2 className="font-bold">Wallet Address</h2>
-            {address}
-          </div>
-        </div>
-        <div className="flex flex-row text-center justify-center mt-10 md:text-2xl text-white">
-          <div>
-            <h2 className="font-bold">No. of NFTs</h2>
-            {data.length}
-          </div>
-          <div className="ml-20">
-            <h2 className="font-bold">Total Value</h2>
-            {totalPrice} ETH
-          </div>
-        </div>
         <div className="flex flex-col text-center items-center mt-11 text-white">
-          <h2 className="font-bold">Your NFTs</h2>
+          <h2 className="font-bold text-3xl mb-2">Your NFT's</h2>
           <div className="flex justify-center flex-wrap max-w-screen-xl">
             {data.map((value, index) => {
               return <NFTTile data={value} key={index}></NFTTile>;
             })}
           </div>
-          <div className="mt-10 text-xl">
-            {data.length == 0
-              ? "Oops, No NFT data to display (Are you logged in?)"
-              : ""}
+          <div className="mt-10">
+            {!dataFetched ? "Loading your NFT's..." : ""}
           </div>
         </div>
       </div>

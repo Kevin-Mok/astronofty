@@ -25,23 +25,23 @@ class UpdateImages extends React.Component {
       numUpload: 1,
       files: {
         // 0: {
-          // loaded: 0,
-          // total: 0,
+        // loaded: 0,
+        // total: 0,
         // },
       },
     };
     for (let i = 0; i < props.data.images.length; i++) {
-      console.log(props.data.images[i])
+      console.log(props.data.images[i]);
       // let files = { ...prevState.files };
       this.state.files[i] = {
         name: props.data.images[i].trait_type,
         cid: props.data.images[i].value,
         loaded: 0,
         total: 0,
-      }
+      };
     }
-    this.state.numUpload = props.data.images.length
-    console.log(this.state)
+    this.state.numUpload = props.data.images.length;
+    console.log(this.state);
   }
 
   onAddUpload = (e) => {
@@ -139,13 +139,14 @@ class UpdateImages extends React.Component {
 
       xhr.open(
         "POST",
-        "http://localhost:3004/content/add"
+        // "http://localhost:3004/content/add"
+      "https://api.estuary.tech/content/add"
         // "https://upload.estuary.tech/content/add"
       );
       xhr.setRequestHeader(
         "Authorization",
-        "Bearer " + process.env.REACT_APP_LOCAL_ESTUARY
-        // "Bearer " + process.env.REACT_APP_LIVE_ESTUARY
+        // "Bearer " + process.env.REACT_APP_LOCAL_ESTUARY
+        "Bearer " + process.env.REACT_APP_LIVE_ESTUARY
       );
       xhr.send(formData);
     });
@@ -153,68 +154,72 @@ class UpdateImages extends React.Component {
 
   upload = (fileKey) => {
     return new Promise((resolve) => {
-      if (!this.state.files[fileKey].file) {
+      console.log(!("file" in this.state.files[fileKey]));
+      if (!("file" in this.state.files[fileKey])) {
+        console.log(!("file" in this.state.files[fileKey]));
         resolve({
           name: this.state.files[fileKey].name,
           cid: this.state.files[fileKey].cid,
         });
+      } else {
+        const formData = new FormData();
+        // formData.append("data", e.target.files[0]);
+        const file = this.state.files[fileKey]["file"];
+        console.log(file);
+        formData.append("data", file);
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.upload.onprogress = (event) => {
+          // this.setState({
+          // loaded: event.loaded,
+          // total: event.total
+          // });
+          this.setFileProgress({
+            num: fileKey,
+            loaded: event.loaded,
+            total: event.total,
+          });
+        };
+
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            let cid = JSON.parse(xhr.responseText).cid;
+            cid = this.formatCID(cid);
+            console.log(cid);
+            this.setState(
+              (prevState) => {
+                let files = { ...prevState.files };
+                files[fileKey] = {
+                  ...prevState.files[fileKey],
+                  cid: cid,
+                };
+                return { files };
+              },
+              () => {
+                // console.log(this.state)
+                console.log(this.state.files, fileKey);
+                resolve({
+                  name: this.state.files[fileKey].name,
+                  cid: this.state.files[fileKey].cid,
+                });
+              }
+            );
+          }
+        }.bind(this);
+        xhr.open(
+          "POST",
+          // "http://localhost:3004/content/add"
+      "https://api.estuary.tech/content/add"
+          // "https://upload.estuary.tech/content/add"
+        );
+        xhr.setRequestHeader(
+          "Authorization",
+          // "Bearer " + process.env.REACT_APP_LOCAL_ESTUARY
+          "Bearer " + process.env.REACT_APP_LIVE_ESTUARY
+        );
+        xhr.send(formData);
       }
-      const formData = new FormData();
-      // formData.append("data", e.target.files[0]);
-      const file = this.state.files[fileKey]["file"];
-      console.log(file);
-      formData.append("data", file);
-
-      const xhr = new XMLHttpRequest();
-
-      xhr.upload.onprogress = (event) => {
-        // this.setState({
-        // loaded: event.loaded,
-        // total: event.total
-        // });
-        this.setFileProgress({
-          num: fileKey,
-          loaded: event.loaded,
-          total: event.total,
-        });
-      };
-
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-          let cid = JSON.parse(xhr.responseText).cid;
-          cid = this.formatCID(cid);
-          console.log(cid);
-          this.setState(
-            (prevState) => {
-              let files = { ...prevState.files };
-              files[fileKey] = {
-                ...prevState.files[fileKey],
-                cid: cid,
-              };
-              return { files };
-            },
-            () => {
-              // console.log(this.state)
-              console.log(this.state.files, fileKey);
-              resolve({
-                name: this.state.files[fileKey].name,
-                cid: this.state.files[fileKey].cid,
-              });
-            }
-          );
-        }
-      }.bind(this);
-      xhr.open(
-        "POST",
-        "http://localhost:3004/content/add"
-        // "https://upload.estuary.tech/content/add"
-      );
-      xhr.setRequestHeader(
-        "Authorization",
-        "Bearer " + process.env.REACT_APP_LOCAL_ESTUARY
-        // "Bearer " + process.env.REACT_APP_LIVE_ESTUARY
-      );
-      xhr.send(formData);
     });
   };
 
@@ -322,19 +327,21 @@ class UpdateImages extends React.Component {
 
     return (
       <div className="">
-        <div className="flex flex-col place-items-center mt-10" id="nftForm">
-          <form className="bg-white shadow-md rounded px-8 pt-4 pb-8 mb-4">
+        <div className="flex flex-col place-items-center mt-4" id="nftForm">
+          <form className="shadow-md rounded mb-4 pr-8">
             <div>
               <label
-                className="block text-purple-500 text-sm font-bold mb-2"
+                className="block
+                text-purple-500
+                font-bold mb-2"
                 htmlFor="image"
               >
-                Upload Image
+                Upload Images
               </label>
               {uploadChildren}
             </div>
             <button
-              className="font-bold mt-10
+              className="font-bold mt-4
                   bg-purple-500 text-white rounded p-2
               shadow-lg"
               onClick={this.onAddUpload}

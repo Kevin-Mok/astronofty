@@ -11,6 +11,9 @@ import {
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 
+import "./Navbar.css";
+import { shortenAddress } from "./NFTpage.js";
+
 function Navbar() {
   const [connected, toggleConnect] = useState(false);
   const location = useLocation();
@@ -72,20 +75,13 @@ function Navbar() {
         <ul className="flex items-end justify-between py-3 bg-transparent text-white pr-5">
           <li className="flex items-end ml-5 pb-2">
             <Link to="/">
-              <img
-                src={fullLogo}
-                alt=""
-                width={120}
-                height={120}
-                className="inline-block -mt-2"
-              />
-              <div className="inline-block font-bold text-xl ml-2">
-                NFT Marketplace
+              <div className="inline-block font-bold text-4xl ml-2 physure">
+                Astronofty
               </div>
             </Link>
           </li>
           <li className="w-2/6">
-            <ul className="lg:flex justify-between font-bold mr-10 text-lg">
+            <ul className="lg:flex justify-center font-bold mr-10 text-lg">
               {location.pathname === "/" ? (
                 <li className="border-b-2 hover:pb-0 p-2">
                   <Link to="/">Marketplace</Link>
@@ -96,11 +92,11 @@ function Navbar() {
                 </li>
               )}
               {location.pathname === "/createNFT" ? (
-                <li className="border-b-2 hover:pb-0 p-2">
+                <li className="border-b-2 hover:pb-0 p-2 text-center">
                   <Link to="/createNFT">Create NFT</Link>
                 </li>
               ) : (
-                <li className="hover:border-b-2 hover:pb-0 p-2">
+                <li className="hover:border-b-2 hover:pb-0 p-2 text-center">
                   <Link to="/createNFT">Create NFT</Link>
                 </li>
               )}
@@ -115,7 +111,10 @@ function Navbar() {
               )}
               <li>
                 <button
-                  className="enableEthereumButton bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm"
+                  className="enableEthereumButton
+                  bg-blue-500 hover:bg-blue-700
+                  text-white font-bold py-2
+                  px-4 ml-3 rounded text-sm mt-2"
                   onClick={connectWebsite}
                 >
                   {connected ? "Connected" : "Connect Wallet"}
@@ -125,11 +124,11 @@ function Navbar() {
           </li>
         </ul>
       </nav>
-      <div className="text-white text-bold text-right mr-10 text-sm">
+      <div className="text-white text-bold text-right mt-1 text-sm">
         {currAddress !== "0x"
           ? "Connected to"
           : "Not Connected. Please login to view NFTs"}{" "}
-        {currAddress !== "0x" ? currAddress.substring(0, 15) + "..." : ""}
+        {currAddress !== "0x" ? shortenAddress(currAddress) : ""}
       </div>
     </div>
   );

@@ -1,7 +1,5 @@
 import React from "react";
 
-import "./Upload.css";
-
 // <input type="submit" value="Confirm" />
 // <pre>{JSON.stringify(this.state, null, 1)}</pre>
 class Upload extends React.Component {
@@ -12,7 +10,7 @@ class Upload extends React.Component {
       name: "",
     };
     if (props.name) {
-      this.state.name = props.name
+      this.state.name = props.name;
     }
   }
 
@@ -53,8 +51,11 @@ class Upload extends React.Component {
           onChange={this.addNameEvent}
           value={this.state.name}
         />
-        <input type="file" onChange={this.addFileEvent} />
-        <br />
+        <input
+          type="file"
+          onChange={this.addFileEvent}
+          className="inline my-4 text-white"
+        />
         <Progress loaded={this.props.loaded} total={this.props.total} />
         <br />
       </React.Fragment>
@@ -64,11 +65,17 @@ class Upload extends React.Component {
 
 const Progress = ({ loaded, total }) => {
   // <pre>{this.props.loaded}/{this.props.total}</pre>
-  const totalZero = total == 0;
   return (
-    <div className={totalZero ? "hide-progress" : "show-progress"}>
+    <span
+      className={
+        total == 0
+          ? // "inline text-white" :
+            "hidden text-white"
+          : "inline text-white"
+      }
+    >
       {(loaded / total) * 100}%
-    </div>
+    </span>
   );
 };
 

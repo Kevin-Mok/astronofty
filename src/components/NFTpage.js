@@ -10,7 +10,7 @@ import { Carousel } from "react-responsive-carousel";
 import styles from "react-responsive-carousel/lib/styles/carousel.min.css";
 // var Carousel = require('react-responsive-carousel').Carousel;
 
-const shortenAddress = (addr) => {
+export const shortenAddress = (addr) => {
   return (
     addr.substring(0, 5) + "..." + addr.substring(addr.length - 4, addr.length)
   );
@@ -27,7 +27,7 @@ export const fetchedPriceToEth = (wei) => {
   return eth;
 };
 
-export const getNFTData = async (tokenId) => { 
+export const getNFTData = async (tokenId) => {
   const ethers = require("ethers");
   //After adding your Hardhat network to your metamask, this code will get providers and signers
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -65,15 +65,17 @@ export const getNFTData = async (tokenId) => {
     addr: addr,
     item: item,
     listedToken: listedToken,
-  }
-}
+  };
+};
 
 export default function NFTPage(props) {
   const [data, updateData] = useState({ owner: "", images: [] });
   // const [userData, updateUserData] = useState({ owner: "", images: [] });
   const [dataFetched, updateDataFetched] = useState(false);
-  const [message, updateMessage] = useState("");
+  const [message, updateMessage] = useState();
+  // const [message, updateMessage] = useState("Please confirm the mint transaction and then wait for the transaction to finish.");
   const [txn, updateTxn] = useState({ txn: false, txnLink: "" });
+  // const [txn, updateTxn] = useState({ txn: true, txnLink: "https://goerli.etherscan.io/tx/0xd8a758071c0fa625c2ae48fa036a5833fa7c2c74291735ba98228f15ee1a53fb" });
   const [currAddress, updateCurrAddress] = useState("0x");
   const [price, updatePrice] = useState(0);
   const [userPrice, updateUserPrice] = useState("1");
@@ -85,7 +87,7 @@ export default function NFTPage(props) {
   // }, [data]);
 
   async function updateNFTData(tokenId) {
-    const { item, listedToken, addr } = await getNFTData(tokenId)
+    const { item, listedToken, addr } = await getNFTData(tokenId);
     updateData(item);
     // updateUserData(item);
     if (listedToken.currentlyListed) {
@@ -93,6 +95,7 @@ export default function NFTPage(props) {
     } else {
       updatePrice(notListedStr);
     }
+    console.log(price);
     updateDataFetched(true);
     console.log("address", addr);
     updateCurrAddress(addr.toLowerCase());
@@ -149,7 +152,7 @@ export default function NFTPage(props) {
       //After adding your Hardhat network to your metamask, this code will get providers and signers
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      console.log(metadataLink)
+      console.log(metadataLink);
 
       //Pull the deployed contract instance
       let contract = new ethers.Contract(
@@ -162,8 +165,12 @@ export default function NFTPage(props) {
         "Please confirm the edit transaction and then wait for the transaction to finish."
       );
       //run the executeSale function
-      console.log(tokenId, metadataLink, salePrice)
-      let transaction = await contract.modifyToken(tokenId, metadataLink, salePrice);
+      console.log(tokenId, metadataLink, salePrice);
+      let transaction = await contract.modifyToken(
+        tokenId,
+        metadataLink,
+        salePrice
+      );
       console.log(transaction);
       updateTxn({
         txn: true,
@@ -175,15 +182,15 @@ export default function NFTPage(props) {
       await updateNFTData(tokenId);
       // awaitTxn(transaction, "You successfully listed your NFT.")
     } catch (e) {
-      updateMessage("Upload Error" + e);
+      updateMessage("" + e);
     }
   }
 
   const openImg = (index, image) => {
     // console.log(index, image)
     // window.open(image.value, '_blank', 'noreferrer');
-    window.open(data.images[index].value, '_blank', 'noreferrer');
-  }
+    window.open(data.images[index].value, "_blank", "noreferrer");
+  };
 
   const params = useParams();
   const tokenId = params.tokenId;
@@ -192,34 +199,40 @@ export default function NFTPage(props) {
   return (
     <div style={{ "min-height": "100vh" }}>
       <Navbar></Navbar>
-      <div className="flex ml-20 mt-20">
-        <Carousel showArrows={true} onClickItem={openImg}>
+      <div className="flex ml-20 mt-20 justify-center">
+        <Carousel className="w-1/2" showArrows={true} onClickItem={openImg}>
           {data.images.map((image) => {
             return (
               <div>
-                <img src={image.value} />
+                <img className="bg-white" src={image.value} />
                 <p className="legend">{image.trait_type}</p>
               </div>
             );
           })}
         </Carousel>
-        <div className="text-xl w-1/3 ml-20 space-y-8 text-white shadow-2xl rounded-lg border-2 p-5">
-          <div>Token ID: {data.tokenId}</div>
-          <div>Name: {data.name}</div>
-          <div>Description: {data.description}</div>
+        <div
+          className="text-xl w-1/3 ml-20
+          space-y-8 text-white shadow-2xl
+          rounded-lg border-2 p-5 h-min"
+        >
+          <span>Token ID: {data.tokenId}</span>
           <a href={data.metadata} target="_blank">
-            <button class="btn btn-blue bg-blue-500 p-2 text-sm">
+            <button
+              className="btn font-bold inline ml-5
+                  bg-purple-500 text-white rounded p-2
+              shadow-lg"
+            >
               Metadata
             </button>
           </a>
+          <div>Name: {data.name}</div>
+          <div>Description: {data.description}</div>
           <div>
             Owner:
             {currAddress == data.owner ? (
-              <span className="text-emerald-700">&nbsp;you</span>
+              <span className="text-purple-500">&nbsp;you</span>
             ) : (
-              <span className="text-sm">
-                &nbsp;{shortenAddress(data.owner)}
-              </span>
+              <span>&nbsp;{shortenAddress(data.owner)}</span>
             )}
           </div>
           <div>
@@ -228,6 +241,7 @@ export default function NFTPage(props) {
           </div>
           {currAddress == data.owner ? (
             <div>
+              <span>List: </span>
               <input
                 className="shadow appearance-none
                   border rounded w-20 py-2 px-3
@@ -235,7 +249,7 @@ export default function NFTPage(props) {
               focus:shadow-outline"
                 id="name"
                 type="text"
-                placeholder="iPhone 14"
+                placeholder="1"
                 onChange={(e) => {
                   updateUserPrice(e.target.value);
                 }}
@@ -245,63 +259,49 @@ export default function NFTPage(props) {
               <UpdateImages data={data} metaCallback={editNFT} />
             </div>
           ) : (
-            <div></div>
+            <span>{""}</span>
           )}
-          {price != notListedStr ? (<button
-              className="enableEthereumButton bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm"
+          {price != notListedStr && currAddress != data.owner ? (
+            <button
+              className="btn font-bold
+                  bg-purple-500 text-white rounded p-2
+              shadow-lg"
+              // className="enableEthereumButton
+              // bg-blue-500 hover:bg-blue-700
+              // text-white font-bold py-2 px-4
+              // rounded"
               onClick={() => buyNFT(tokenId)}
             >
               Buy NFT
-          </button>) :
-            <div></div>
-          }
-          <div>
-            {txn.txn == false ? (
-              <div className="text-emerald-700 text-center mt-3">{message}</div>
-            ) : (
-              <div>
-                <span>Transaction Link: </span>
-                <a
-                  href={txn.txnLink}
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  target="_blank"
-                >
-                  {txn.txnLink}
-                </a>
-              </div>
-            )}
-          </div>
+            </button>
+          ) : (
+            <span></span>
+          )}
+          {txn.txn == false ? (
+            <div className="text-white text-center">{message}</div>
+          ) : (
+            <div className="text-center mr-5">
+              <a
+                href={txn.txnLink}
+                className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                target="_blank"
+              >
+                Transaction Link
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-// <input type="button" class="button" value="Metadata" />
-              // {userData.images.map((image, index) => {
-                // return (
-                  // <div>
-
-              // <input
-                // className="shadow appearance-none
-                  // border w-40 rounded py-2 px-3
-              // text-gray-700 leading-tight focus:outline-none
-              // focus:shadow-outline"
-                // id="name"
-                // type="text"
-                // placeholder="iPhone 14"
-                // onChange={(e) => {
-                  // updateImageDescription(index, e.target.value);
-                // }}
-                // value={image.trait_type}
-              // ></input>
-                  // </div>
-                // );
-              // })}
-
-              // <button
-                // className="enableEthereumButton bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm"
-                // onClick={() => listNFT(tokenId)}
-              // >
-                // List NFT
-              // </button>
+// <button
+// className="enableEthereumButton bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm"
+// onClick={() => listNFT(tokenId)}
+// >
+// List NFT
+// </button>
+// class="btn btn-blue bg-blue-500 p-2 text-sm">
+// className="enableEthereumButton bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm"
+// <Carousel className="h-1/2 custom-carousel w-1/2 max-h-screen" showArrows={true} onClickItem={openImg}>
