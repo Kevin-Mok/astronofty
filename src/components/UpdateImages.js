@@ -100,8 +100,9 @@ class UpdateImages extends React.Component {
   };
 
   formatCID = (cid) => {
-    // return "https://gateway.estuary.tech/gw/ipfs/" + cid
-    return "https://ipfs.io/ipfs/" + cid;
+    // // return "https://gateway.estuary.tech/gw/ipfs/" + cid
+    return "https://api.estuary.tech/gw/ipfs/" + cid
+    // return "https://ipfs.io/ipfs/" + cid;
   };
 
   uploadMetadata = (metadata) => {

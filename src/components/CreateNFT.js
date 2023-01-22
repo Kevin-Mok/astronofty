@@ -98,8 +98,8 @@ class CreateNFT extends React.Component {
   };
 
   formatCID = (cid) => {
-    // return "https://gateway.estuary.tech/gw/ipfs/" + cid
-    return "https://ipfs.io/ipfs/" + cid;
+    return "https://api.estuary.tech/gw/ipfs/" + cid
+    // return "https://ipfs.io/ipfs/" + cid;
   };
 
   uploadMetadata = (metadata) => {
@@ -274,8 +274,9 @@ class CreateNFT extends React.Component {
 
       //actually create the NFT
       let transaction = await contract.createToken(
-        this.state.recipient,
-        metadataCID
+        // this.state.recipient,
+        metadataCID,
+        BigInt(this.state.price * Math.pow(10, 18))
       );
       this.setState({
         txn: {
@@ -390,7 +391,7 @@ class CreateNFT extends React.Component {
                 className="block text-purple-500 font-bold mb-2"
                 htmlFor="name"
               >
-                NFT Recipient
+                NFT Price (ETH)
               </label>
               <input
                 className="shadow appearance-none
@@ -399,13 +400,13 @@ class CreateNFT extends React.Component {
               focus:shadow-outline"
                 id="name"
                 type="text"
-                placeholder="0x820f57945ef2e6e880A251cfeB9770E7C89c6842"
+                placeholder="0.05"
                 onChange={(e) => {
                   this.setState({
-                    recipient: e.target.value,
+                    price: e.target.value,
                   });
                 }}
-                value={this.state.recipient}
+                value={this.state.price}
               ></input>
             </div>
             <div>
@@ -433,7 +434,7 @@ class CreateNFT extends React.Component {
                   bg-purple-500 text-white rounded p-2
                   shadow-lg"
             >
-              List NFT
+              Create NFT
             </button>
             {this.state.txn.txn == false ? (
               <div className="mt-5 text-white text-center">
@@ -472,3 +473,24 @@ class CreateNFT extends React.Component {
 }
 
 export default CreateNFT;
+              // <label
+                // className="block text-purple-500 font-bold mb-2"
+                // htmlFor="name"
+              // >
+                // NFT Recipient
+              // </label>
+              // <input
+                // className="shadow appearance-none
+                  // border rounded w-full py-2 px-3
+              // text-gray-700 leading-tight focus:outline-none
+              // focus:shadow-outline"
+                // id="name"
+                // type="text"
+                // placeholder="0x820f57945ef2e6e880A251cfeB9770E7C89c6842"
+                // onChange={(e) => {
+                  // this.setState({
+                    // recipient: e.target.value,
+                  // });
+                // }}
+                // value={this.state.recipient}
+              // ></input>

@@ -16,9 +16,9 @@ function NFTTile(data) {
   items-center rounded-lg w-48 md:w-72
   shadow-2xl"
       >
-        <div className="absolute text-black text-xl ml-44 mt-2">
+        <div className="absolute text-black text-xl ml-48 mt-2">
           {data.data.listed ? (
-            <div className="bg-white bg-opacity-70 rounded p-0.5">
+            <div className="bg-white bg-opacity-70 rounded-lg p-0.5">
               <img
                 src={ethLogo}
                 alt=""
