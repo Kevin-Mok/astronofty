@@ -1,3 +1,11 @@
+![astronofty-front-page](https://user-images.githubusercontent.com/25857736/214691436-26564c14-f7e0-45d0-9864-d2b0e4c08e43.png)
+
+Astronofty is an NFT marketplace to create/buy/sell 
+astrophotography. This project was created for UofTHacks 
+where it came in [2nd 
+overall](https://devpost.com/software/astronofty). You can 
+view a demo of it [here](https://youtu.be/fRc4_yx4ONE).
+
 ## Inspiration
 The inspiration for this project came from my passion for decentralized technology.  
 One particular niche of decentralization 
@@ -18,8 +26,7 @@ platform while using Estuary as decentralized
 storage platform for the photos.
 
 ## What It Does
-You can mint/create NFT's of your 
-astrophotography to sell to other users. 
+You can mint/create NFT's of your astrophotography to sell to other users. 
 
 ## How I Built It
 - Frontend: React
