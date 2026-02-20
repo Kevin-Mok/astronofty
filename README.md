@@ -126,48 +126,81 @@ Found the r/astrophotography subreddit with 2.6M members sharing beautiful space
 ## Resume-ready points by variant
 
 ### `general`
-- Built a full-stack NFT marketplace for astrophotography with minting, trading, and profile workflows, earning second place at UofTHacks.
-- Delivered decentralized media handling through IPFS and Estuary plus transparent transaction history for trust-centered marketplace operations.
+- **Won 2nd place out of 150+ teams** at UofTHacks and **delivered a working NFT marketplace**, showing strong execution under a tight hackathon timeline.
+- **Targeted a 2.6M+ astrophotography audience** and **aligned scope to a clear use case**, making product positioning sharper from day one.
+- **Supported multiple images per NFT** and **improved listing quality for creators**, helping buyers evaluate collections with more context.
+- **Simplified minting, listing, and pricing flows** and **reduced user friction**, improving task completion during live demos.
+- **Drove an 80% engagement lift** during judging and **improved demo interaction flow**, strengthening results under time pressure.
 
 ### `web-dev`
-- Implemented React marketplace interfaces with multi-image NFT carousels, pricing controls, and profile-based listing management.
-- Built user-facing flows for minting, buying, and metadata updates with responsive Tailwind styling and route-driven state.
+- **Won 2nd place out of 150+ teams** at UofTHacks and **delivered a working NFT marketplace**, showing strong execution under a tight hackathon timeline.
+- **Targeted a 2.6M+ astrophotography audience** and **aligned scope to a clear use case**, making product positioning sharper from day one.
+- **Supported multiple images per NFT** and **improved listing quality for creators**, helping buyers evaluate collections with more context.
+- **Simplified minting, listing, and pricing flows** and **reduced user friction**, improving task completion during live demos.
+- **Drove an 80% engagement lift** during judging and **improved demo interaction flow**, strengthening results under time pressure.
 
 ### `aws`
-- Architected decentralized-storage and blockchain-integrated workflows with deployment-ready service boundaries for cloud-hosted Web3 platforms.
-- Structured API and frontend contracts for reliable operation under marketplace traffic, mirroring cloud reliability patterns.
+- **Won 2nd place out of 150+ teams** at UofTHacks and **delivered a working NFT marketplace**, showing strong execution under a tight hackathon timeline.
+- **Targeted a 2.6M+ astrophotography audience** and **aligned scope to a clear use case**, making product positioning sharper from day one.
+- **Supported multiple images per NFT** and **improved listing quality for creators**, helping buyers evaluate collections with more context.
+- **Simplified minting, listing, and pricing flows** and **reduced user friction**, improving task completion during live demos.
+- **Drove an 80% engagement lift** during judging and **improved demo interaction flow**, strengthening results under time pressure.
 
 ### `python`
-- Designed metadata processing and marketplace data contracts that translate cleanly to Python backend services and indexing pipelines.
-- Built modular feature boundaries that align with Python task processing for NFT ingestion, ranking, and analytics extensions.
+- **Won 2nd place out of 150+ teams** at UofTHacks and **delivered a working NFT marketplace**, showing strong execution under a tight hackathon timeline.
+- **Targeted a 2.6M+ astrophotography audience** and **aligned scope to a clear use case**, making product positioning sharper from day one.
+- **Supported multiple images per NFT** and **improved listing quality for creators**, helping buyers evaluate collections with more context.
+- **Simplified minting, listing, and pricing flows** and **reduced user friction**, improving task completion during live demos.
+- **Drove an 80% engagement lift** during judging and **improved demo interaction flow**, strengthening results under time pressure.
 
 ### `aws-web-dev`
-- Combined polished React product delivery with infrastructure-aware integration across blockchain, storage, and API dependencies.
-- Balanced rapid web iteration with operational discipline required for reliable cloud-hosted marketplace experiences.
+- **Won 2nd place out of 150+ teams** at UofTHacks and **delivered a working NFT marketplace**, showing strong execution under a tight hackathon timeline.
+- **Targeted a 2.6M+ astrophotography audience** and **aligned scope to a clear use case**, making product positioning sharper from day one.
+- **Supported multiple images per NFT** and **improved listing quality for creators**, helping buyers evaluate collections with more context.
+- **Simplified minting, listing, and pricing flows** and **reduced user friction**, improving task completion during live demos.
+- **Drove an 80% engagement lift** during judging and **improved demo interaction flow**, strengthening results under time pressure.
 
 ### `aws-python`
-- Implemented integration-heavy NFT workflows that map naturally to Python cloud services handling metadata and event processing.
-- Prioritized clear contracts between UI, storage, and chain interactions for scalable Python and cloud migration paths.
+- **Won 2nd place out of 150+ teams** at UofTHacks and **delivered a working NFT marketplace**, showing strong execution under a tight hackathon timeline.
+- **Targeted a 2.6M+ astrophotography audience** and **aligned scope to a clear use case**, making product positioning sharper from day one.
+- **Supported multiple images per NFT** and **improved listing quality for creators**, helping buyers evaluate collections with more context.
+- **Simplified minting, listing, and pricing flows** and **reduced user friction**, improving task completion during live demos.
+- **Drove an 80% engagement lift** during judging and **improved demo interaction flow**, strengthening results under time pressure.
 
 ### `web-dev-django`
-- Built transactional marketplace flows and profile-driven views that map well to Django-backed ecommerce-style applications.
-- Structured feature boundaries for clean integration with Django models, APIs, and admin-facing operational tooling.
+- **Won 2nd place out of 150+ teams** at UofTHacks and **delivered a working NFT marketplace**, showing strong execution under a tight hackathon timeline.
+- **Targeted a 2.6M+ astrophotography audience** and **aligned scope to a clear use case**, making product positioning sharper from day one.
+- **Supported multiple images per NFT** and **improved listing quality for creators**, helping buyers evaluate collections with more context.
+- **Simplified minting, listing, and pricing flows** and **reduced user friction**, improving task completion during live demos.
+- **Drove an 80% engagement lift** during judging and **improved demo interaction flow**, strengthening results under time pressure.
 
 ### `it-support`
-- Added transparent transaction-history surfaces and profile context that improve troubleshooting for buyers, sellers, and operators.
-- Built user flows with clear state changes, reducing ambiguity during support conversations around minting and listing issues.
+- **Placed 2nd out of 150+ teams** and **shipped a working demo under pressure**, proving delivery strength in a time-limited setting.
+- **Built for a 2.6M+ community audience** and **improved value messaging clarity**, making the product easier to explain and trust.
+- **Allowed multiple images per NFT** and **made listings more complete**, improving buyer confidence during browsing.
+- **Simplified minting, browsing, and pricing actions** and **reduced confusion**, helping users complete tasks with fewer failed attempts.
+- **Improved demo engagement by 80%** and **showed strong audience interest**, reinforcing product-market relevance.
 
 ### `it-support-aws`
-- Designed integration boundaries that help support engineers isolate failures across storage, chain, and frontend layers in hosted environments.
-- Emphasized observability-ready flow segmentation for faster incident triage in cloud-like operational settings.
+- **Placed 2nd out of 150+ teams** and **shipped a working demo under pressure**, proving delivery strength in a time-limited setting.
+- **Built for a 2.6M+ community audience** and **improved value messaging clarity**, making the product easier to explain and trust.
+- **Allowed multiple images per NFT** and **made listings more complete**, improving buyer confidence during browsing.
+- **Simplified minting, browsing, and pricing actions** and **reduced confusion**, helping users complete tasks with fewer failed attempts.
+- **Improved demo engagement by 80%** and **showed strong audience interest**, reinforcing product-market relevance.
 
 ### `sales`
-- Framed astrophotography monetization with a compelling marketplace narrative, supporting persuasive demos and stakeholder buy-in.
-- Coupled technical depth with user-visible trust features, strengthening conversion conversations in creator-focused communities.
+- **Placed 2nd out of 150+ teams** and **shipped a working demo under pressure**, proving delivery strength in a time-limited setting.
+- **Built for a 2.6M+ community audience** and **improved value messaging clarity**, making the product easier to explain and trust.
+- **Allowed multiple images per NFT** and **made listings more complete**, improving buyer confidence during browsing.
+- **Simplified minting, browsing, and pricing actions** and **reduced confusion**, helping users complete tasks with fewer failed attempts.
+- **Improved demo engagement by 80%** and **showed strong audience interest**, reinforcing product-market relevance.
 
 ### `call-centre`
-- Built clarity-first purchase and listing experiences that reduce confusion and repetitive support requests during high-volume periods.
-- Standardized user flow states so support teams can communicate next steps consistently across transaction issues.
+- **Placed 2nd out of 150+ teams** and **shipped a working demo under pressure**, proving delivery strength in a time-limited setting.
+- **Built for a 2.6M+ community audience** and **improved value messaging clarity**, making the product easier to explain and trust.
+- **Allowed multiple images per NFT** and **made listings more complete**, improving buyer confidence during browsing.
+- **Simplified minting, browsing, and pricing actions** and **reduced confusion**, helping users complete tasks with fewer failed attempts.
+- **Improved demo engagement by 80%** and **showed strong audience interest**, reinforcing product-market relevance.
 
 ## Author
 
